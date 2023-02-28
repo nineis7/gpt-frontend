@@ -37,3 +37,5 @@ with tvm.transform.PassContext(opt_level=opt_level):
     # optimize() is where we will do operator fusion and quatization
     mod, params = module.optimize(mod, target=target, params=params)
     print(mod)
+
+# add some changes
