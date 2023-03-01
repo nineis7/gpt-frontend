@@ -2,6 +2,7 @@ import tvm.relay
 import torch
 import numpy as np
 import os
+import time
 
 # Import required libraries
 import torch
@@ -32,14 +33,14 @@ tt_c = tokens_tensor.cuda()
 res_pt = model(tt_c)
 torch.cuda.synchronize()
 
-def y():
-    for i in range(100):
-        model(tt_c)
-    torch.cuda.synchronize()
+start_time = time.time()
+for i in range(100):
+    model(tt_c)
+torch.cuda.synchronize()
 
-y()
+end_time = time.time()
+print("耗时: {:.2f}秒".format(end_time - start_time))
 
-'''
 shape_list = [(i.debugName().split('.')[0], i.type().sizes()) for i in  list(traced_model.graph.inputs())[1:]]
 import tvm.relay
 # parse pytorch model to tvm relay ir
@@ -53,7 +54,7 @@ with tvm.transform.PassContext(opt_level=opt_level):
     module = BuildModule()
     # optimize() is where we will do operator fusion and quatization
     mod, params = module.optimize(mod, target=target, params=params)
-    print(mod)
+    #print(mod)
 
-# add some changes
-'''
+
+
