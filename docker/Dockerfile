@@ -36,11 +36,6 @@ RUN rm clang+llvm-10.0.0-x86_64-linux-gnu-ubuntu-18.04.tar.xz && mv clang+llvm-1
 
 # Other tools
 RUN apt-get install -y vim 
-# PythonCppDubugger
-RUN apt-get -y install gdb
-RUN apt-get -y install ssh
-RUN apt-get -y install gcc
-
 
 RUN mkdir /workspace
 
@@ -78,3 +73,8 @@ RUN wget https://cmake.org/files/v3.21/cmake-3.21.2-linux-x86_64.tar.gz \
     && tar -zxvf cmake-3.21.2-linux-x86_64.tar.gz \
     && mv cmake-3.21.2-linux-x86_64 cmake-3.21.2 \
     && ln -sf /cmake-3.21.2/bin/* /usr/bin
+
+# PythonCppDubugger
+RUN apt-get -y install gdb
+RUN apt-get -y install ssh
+RUN apt-get -y install gcc

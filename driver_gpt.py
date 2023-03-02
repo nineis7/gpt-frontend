@@ -8,12 +8,14 @@ import time
 import torch
 from transformers import AutoTokenizer, OpenAIGPTModel
 
+#print(torch.__version__)
+
 tokenizer = AutoTokenizer.from_pretrained("openai-gpt")
 model = OpenAIGPTModel.from_pretrained("openai-gpt", return_dict=False)
 model.eval() # Set the model in evaluation mode to deactivate the DropOut modules
 for p in model.parameters():
     p.requires_grad_(False)
-#print(model)
+# print(model)
 
 # 生成输入tensor，负责输入进trace中flow一遍得到trace后的计算图
 # Encode a text inputs
@@ -27,7 +29,7 @@ traced_model = torch.jit.trace(model, [tokens_tensor], strict=False)
 traced_model.eval()
 for p in traced_model.parameters():
     p.requires_grad_(False)
-    
+
 model.cuda()
 tt_c = tokens_tensor.cuda()
 res_pt = model(tt_c)
@@ -55,6 +57,4 @@ with tvm.transform.PassContext(opt_level=opt_level):
     # optimize() is where we will do operator fusion and quatization
     mod, params = module.optimize(mod, target=target, params=params)
     #print(mod)
-
-
 

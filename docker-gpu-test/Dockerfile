@@ -1,11 +1,11 @@
-FROM nvidia/cuda:11.7.0-cudnn8-devel-ubuntu18.04
-#FROM nvidia/cuda:11.0.3-cudnn8-devel-ubuntu18.04
+#FROM nvidia/cuda:11.7.0-cudnn8-devel-ubuntu18.04
+FROM nvidia/cuda:11.0.3-cudnn8-devel-ubuntu18.04
 
 COPY utils/apt-install-and-clear.sh /usr/local/bin/apt-install-and-clear
 
 RUN apt-get update --fix-missing
 
-RUN apt-install-and-clear -y bzip2 wget sudo binutils git
+RUN apt-get install -y bzip2 wget sudo binutils git
 
 #RUN  wget -q http://developer.download.nvidia.com/compute/redist/cudnn/v7.6.0/cudnn-10.0-linux-x64-v7.6.0.64.tgz && \
 #    tar --no-same-owner -xzf cudnn-10.0-linux-x64-v7.6.0.64.tgz -C /usr/local && \
@@ -15,6 +15,7 @@ RUN apt-install-and-clear -y bzip2 wget sudo binutils git
 COPY install/ubuntu_install_conda.sh /install/ubuntu_install_conda.sh
 RUN bash /install/ubuntu_install_conda.sh
 
+
 ENV PATH /opt/conda/bin:$PATH
 ENV LD_LIBRARY_PATH /usr/local/nvidia/lib:/usr/local/nvidia/lib64
 ENV CONDA_BLD_PATH /tmp
@@ -22,6 +23,7 @@ ENV CONDA_BLD_PATH /tmp
 COPY install/ubuntu_install_core.sh /install/ubuntu_install_core.sh
 RUN bash /install/ubuntu_install_core.sh
 
+RUN conda install python==3.7
 # Globally disable pip cache
 RUN pip config set global.cache-dir false
 
@@ -78,5 +80,3 @@ RUN pip3 install termcolor timm yacs
 
 COPY install/ubuntu_install_python_package.sh /install/ubuntu_install_python_package.sh
 RUN bash /install/ubuntu_install_python_package.sh
-
-RUN sudo apt-get install -y python3.7 python3-dev python3-setuptools libtinfo-dev zlib1g-dev build-essential libedit-dev libxml2-dev
