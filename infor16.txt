@@ -1,0 +1,1000 @@
+type List[A] {
+  Cons(A, List[A]),
+  Nil,
+}
+
+type Option[A] {
+  Some(A),
+  None,
+}
+
+type Tree[A] {
+  Rose(A, List[Tree[A]]),
+}
+
+type tensor_float16_t {
+  tensor_nil_float16,
+  tensor0_float16(float16),
+  tensor1_float16(Tensor[(?), float16]),
+  tensor2_float16(Tensor[(?, ?), float16]),
+  tensor3_float16(Tensor[(?, ?, ?), float16]),
+  tensor4_float16(Tensor[(?, ?, ?, ?), float16]),
+  tensor5_float16(Tensor[(?, ?, ?, ?, ?), float16]),
+  tensor6_float16(Tensor[(?, ?, ?, ?, ?, ?), float16]),
+}
+
+type tensor_float32_t {
+  tensor_nil_float32,
+  tensor0_float32(float32),
+  tensor1_float32(Tensor[(?), float32]),
+  tensor2_float32(Tensor[(?, ?), float32]),
+  tensor3_float32(Tensor[(?, ?, ?), float32]),
+  tensor4_float32(Tensor[(?, ?, ?, ?), float32]),
+  tensor5_float32(Tensor[(?, ?, ?, ?, ?), float32]),
+  tensor6_float32(Tensor[(?, ?, ?, ?, ?, ?), float32]),
+}
+
+type tensor_float64_t {
+  tensor_nil_float64,
+  tensor0_float64(float64),
+  tensor1_float64(Tensor[(?), float64]),
+  tensor2_float64(Tensor[(?, ?), float64]),
+  tensor3_float64(Tensor[(?, ?, ?), float64]),
+  tensor4_float64(Tensor[(?, ?, ?, ?), float64]),
+  tensor5_float64(Tensor[(?, ?, ?, ?, ?), float64]),
+  tensor6_float64(Tensor[(?, ?, ?, ?, ?, ?), float64]),
+}
+
+type tensor_int16_t {
+  tensor_nil_int16,
+  tensor0_int16(int16),
+  tensor1_int16(Tensor[(?), int16]),
+  tensor2_int16(Tensor[(?, ?), int16]),
+  tensor3_int16(Tensor[(?, ?, ?), int16]),
+  tensor4_int16(Tensor[(?, ?, ?, ?), int16]),
+  tensor5_int16(Tensor[(?, ?, ?, ?, ?), int16]),
+  tensor6_int16(Tensor[(?, ?, ?, ?, ?, ?), int16]),
+}
+
+type tensor_int32_t {
+  tensor_nil_int32,
+  tensor0_int32(int32),
+  tensor1_int32(Tensor[(?), int32]),
+  tensor2_int32(Tensor[(?, ?), int32]),
+  tensor3_int32(Tensor[(?, ?, ?), int32]),
+  tensor4_int32(Tensor[(?, ?, ?, ?), int32]),
+  tensor5_int32(Tensor[(?, ?, ?, ?, ?), int32]),
+  tensor6_int32(Tensor[(?, ?, ?, ?, ?, ?), int32]),
+}
+
+type tensor_int64_t {
+  tensor_nil_int64,
+  tensor0_int64(int64),
+  tensor1_int64(Tensor[(?), int64]),
+  tensor2_int64(Tensor[(?, ?), int64]),
+  tensor3_int64(Tensor[(?, ?, ?), int64]),
+  tensor4_int64(Tensor[(?, ?, ?, ?), int64]),
+  tensor5_int64(Tensor[(?, ?, ?, ?, ?), int64]),
+  tensor6_int64(Tensor[(?, ?, ?, ?, ?, ?), int64]),
+}
+
+type tensor_int8_t {
+  tensor_nil_int8,
+  tensor0_int8(int8),
+  tensor1_int8(Tensor[(?), int8]),
+  tensor2_int8(Tensor[(?, ?), int8]),
+  tensor3_int8(Tensor[(?, ?, ?), int8]),
+  tensor4_int8(Tensor[(?, ?, ?, ?), int8]),
+  tensor5_int8(Tensor[(?, ?, ?, ?, ?), int8]),
+  tensor6_int8(Tensor[(?, ?, ?, ?, ?, ?), int8]),
+}
+
+type tensor_uint16_t {
+  tensor_nil_uint16,
+  tensor0_uint16(uint16),
+  tensor1_uint16(Tensor[(?), uint16]),
+  tensor2_uint16(Tensor[(?, ?), uint16]),
+  tensor3_uint16(Tensor[(?, ?, ?), uint16]),
+  tensor4_uint16(Tensor[(?, ?, ?, ?), uint16]),
+  tensor5_uint16(Tensor[(?, ?, ?, ?, ?), uint16]),
+  tensor6_uint16(Tensor[(?, ?, ?, ?, ?, ?), uint16]),
+}
+
+type tensor_uint8_t {
+  tensor_nil_uint8,
+  tensor0_uint8(uint8),
+  tensor1_uint8(Tensor[(?), uint8]),
+  tensor2_uint8(Tensor[(?, ?), uint8]),
+  tensor3_uint8(Tensor[(?, ?, ?), uint8]),
+  tensor4_uint8(Tensor[(?, ?, ?, ?), uint8]),
+  tensor5_uint8(Tensor[(?, ?, ?, ?, ?), uint8]),
+  tensor6_uint8(Tensor[(?, ?, ?, ?, ?, ?), uint8]),
+}
+
+def @main(%input_ids: Tensor[(1, 7), int64] /* ty=Tensor[(1, 7), int64] */) -> Tensor[(1, 7, 768), float32] {
+  %0 = reshape(%input_ids, newshape=[-1, 7]) /* ty=Tensor[(1, 7), int64] */;
+  %1 = cast(%0, dtype="int32") /* ty=Tensor[(1, 7), int32] */;
+  %2 = take(meta[relay.Constant][0] /* ty=Tensor[(40478, 768), float16] */, %1, axis=0) /* ty=Tensor[(1, 7, 768), float16] */;
+  %3 = add(%2, meta[relay.Constant][1] /* ty=Tensor[(1, 7, 768), float16] */) /* ty=Tensor[(1, 7, 768), float16] */;
+  %4 = add(%3, 0f16 /* ty=float16 */) /* ty=Tensor[(1, 7, 768), float16] */;
+  %5 = nn.dropout(%4, rate=0.1f) /* ty=(Tensor[(1, 7, 768), float16], Tensor[(1, 7, 768), float16]) */;
+  %6 = %5.0 /* ty=Tensor[(1, 7, 768), float16] */;
+  %7 = reshape(%6, newshape=[-1, 768]) /* ty=Tensor[(7, 768), float16] */;
+  %8 = nn.dense(%7, meta[relay.Constant][2] /* ty=Tensor[(2304, 768), float16] */, units=2304, out_dtype="float16") /* ty=Tensor[(7, 2304), float16] */;
+  %9 = add(%8, meta[relay.Constant][3] /* ty=Tensor[(2304), float16] */) /* ty=Tensor[(7, 2304), float16] */;
+  %10 = reshape(%9, newshape=[1, 7, 2304]) /* ty=Tensor[(1, 7, 2304), float16] */;
+  %11 = split(%10, indices_or_sections=[768, 1536], axis=2) /* ty=(Tensor[(1, 7, 768), float16], Tensor[(1, 7, 768), float16], Tensor[(1, 7, 768), float16]) */;
+  %12 = %11.0 /* ty=Tensor[(1, 7, 768), float16] */;
+  %13 = reshape(%12, newshape=[1, 7, 12, 64]) /* ty=Tensor[(1, 7, 12, 64), float16] */;
+  %14 = transpose(%13, axes=[0, 2, 1, 3]) /* ty=Tensor[(1, 12, 7, 64), float16] */;
+  %15 = broadcast_to(%14, shape=[1, 12, 7, 64], dtype="float16") /* ty=Tensor[(1, 12, 7, 64), float16] */;
+  %16 = %11.1 /* ty=Tensor[(1, 7, 768), float16] */;
+  %17 = reshape(%16, newshape=[1, 7, 12, 64]) /* ty=Tensor[(1, 7, 12, 64), float16] */;
+  %18 = transpose(%17, axes=[0, 2, 3, 1]) /* ty=Tensor[(1, 12, 64, 7), float16] */;
+  %19 = broadcast_to(%18, shape=[1, 12, 64, 7], dtype="float16") /* ty=Tensor[(1, 12, 64, 7), float16] */;
+  %20 = reshape(%15, newshape=[-1, 7, 64]) /* ty=Tensor[(12, 7, 64), float16] */;
+  %21 = reshape(%19, newshape=[-1, 64, 7]) /* ty=Tensor[(12, 64, 7), float16] */;
+  %22 = nn.batch_matmul(%20, %21, out_dtype="float16") /* ty=Tensor[(12, 7, 7), float16] */;
+  %23 = reshape(%22, newshape=[1, 12, 7, 7]) /* ty=Tensor[(1, 12, 7, 7), float16] */;
+  %24 = squeeze(%23, axis=[]) /* ty=Tensor[(1, 12, 7, 7), float16] */;
+  %25 = divide(%24, 8f16 /* ty=float16 */) /* ty=Tensor[(1, 12, 7, 7), float16] */;
+  %26 = multiply(%25, meta[relay.Constant][4] /* ty=Tensor[(1, 1, 7, 7), float16] */) /* ty=Tensor[(1, 12, 7, 7), float16] */;
+  %27 = add(%26, meta[relay.Constant][5] /* ty=Tensor[(1, 1, 7, 7), float16] */) /* ty=Tensor[(1, 12, 7, 7), float16] */;
+  %28 = cast(%27, dtype="float32") /* ty=Tensor[(1, 12, 7, 7), float32] */;
+  %29 = nn.softmax(%28) /* ty=Tensor[(1, 12, 7, 7), float32] */;
+  %30 = nn.dropout(%29, rate=0.1f) /* ty=(Tensor[(1, 12, 7, 7), float32], Tensor[(1, 12, 7, 7), float32]) */;
+  %31 = %30.0 /* ty=Tensor[(1, 12, 7, 7), float32] */;
+  %32 = broadcast_to(%31, shape=[1, 12, 7, 7]) /* ty=Tensor[(1, 12, 7, 7), float32] */;
+  %33 = reshape(%32, newshape=[-1, 7, 7]) /* ty=Tensor[(12, 7, 7), float32] */;
+  %34 = %11.2 /* ty=Tensor[(1, 7, 768), float16] */;
+  %35 = reshape(%34, newshape=[1, 7, 12, 64]) /* ty=Tensor[(1, 7, 12, 64), float16] */;
+  %36 = transpose(%35, axes=[0, 2, 1, 3]) /* ty=Tensor[(1, 12, 7, 64), float16] */;
+  %37 = broadcast_to(%36, shape=[1, 12, 7, 64], dtype="float16") /* ty=Tensor[(1, 12, 7, 64), float16] */;
+  %38 = cast(%33, dtype="float16") /* ty=Tensor[(12, 7, 7), float16] */;
+  %39 = reshape(%37, newshape=[-1, 7, 64]) /* ty=Tensor[(12, 7, 64), float16] */;
+  %40 = nn.batch_matmul(%38, %39, out_dtype="float16") /* ty=Tensor[(12, 7, 64), float16] */;
+  %41 = reshape(%40, newshape=[1, 12, 7, 64]) /* ty=Tensor[(1, 12, 7, 64), float16] */;
+  %42 = squeeze(%41, axis=[]) /* ty=Tensor[(1, 12, 7, 64), float16] */;
+  %43 = transpose(%42, axes=[0, 2, 1, 3]) /* ty=Tensor[(1, 7, 12, 64), float16] */;
+  %44 = reshape(%43, newshape=[1, 7, 768]) /* ty=Tensor[(1, 7, 768), float16] */;
+  %45 = reshape(%44, newshape=[-1, 768]) /* ty=Tensor[(7, 768), float16] */;
+  %46 = nn.dense(%45, meta[relay.Constant][6] /* ty=Tensor[(768, 768), float16] */, units=768, out_dtype="float16") /* ty=Tensor[(7, 768), float16] */;
+  %47 = add(%46, meta[relay.Constant][7] /* ty=Tensor[(768), float16] */) /* ty=Tensor[(7, 768), float16] */;
+  %48 = reshape(%47, newshape=[1, 7, 768]) /* ty=Tensor[(1, 7, 768), float16] */;
+  %49 = nn.dropout(%48, rate=0.1f) /* ty=(Tensor[(1, 7, 768), float16], Tensor[(1, 7, 768), float16]) */;
+  %50 = %49.0 /* ty=Tensor[(1, 7, 768), float16] */;
+  %51 = add(%6, %50) /* ty=Tensor[(1, 7, 768), float16] */;
+  %52 = cast(%51, dtype="float32") /* ty=Tensor[(1, 7, 768), float32] */;
+  %53 = nn.layer_norm(%52, meta[relay.Constant][8] /* ty=Tensor[(768), float32] */, meta[relay.Constant][9] /* ty=Tensor[(768), float32] */) /* ty=Tensor[(1, 7, 768), float32] */;
+  %54 = reshape(%53, newshape=[-1, 768]) /* ty=Tensor[(7, 768), float32] */;
+  %55 = cast(%54, dtype="float16") /* ty=Tensor[(7, 768), float16] */;
+  %56 = nn.dense(%55, meta[relay.Constant][10] /* ty=Tensor[(3072, 768), float16] */, units=3072, out_dtype="float16") /* ty=Tensor[(7, 3072), float16] */;
+  %57 = add(%56, meta[relay.Constant][11] /* ty=Tensor[(3072), float16] */) /* ty=Tensor[(7, 3072), float16] */;
+  %58 = reshape(%57, newshape=[1, 7, 3072]) /* ty=Tensor[(1, 7, 3072), float16] */;
+  %59 = multiply(%58, 0.5f16 /* ty=float16 */) /* ty=Tensor[(1, 7, 3072), float16] */;
+  %60 = cast(%58, dtype="float32") /* ty=Tensor[(1, 7, 3072), float32] */;
+  %61 = power(%60, 3f /* ty=float32 */) /* ty=Tensor[(1, 7, 3072), float32] */;
+  %62 = multiply(%61, 0.044715f /* ty=float32 */) /* ty=Tensor[(1, 7, 3072), float32] */;
+  %63 = add(%60, %62) /* ty=Tensor[(1, 7, 3072), float32] */;
+  %64 = multiply(%63, 0.797885f /* ty=float32 */) /* ty=Tensor[(1, 7, 3072), float32] */;
+  %65 = tanh(%64) /* ty=Tensor[(1, 7, 3072), float32] */;
+  %66 = cast(%59, dtype="float32") /* ty=Tensor[(1, 7, 3072), float32] */;
+  %67 = add(%65, 1f /* ty=float32 */) /* ty=Tensor[(1, 7, 3072), float32] */;
+  %68 = multiply(%66, %67) /* ty=Tensor[(1, 7, 3072), float32] */;
+  %69 = reshape(%68, newshape=[-1, 3072]) /* ty=Tensor[(7, 3072), float32] */;
+  %70 = cast(%69, dtype="float16") /* ty=Tensor[(7, 3072), float16] */;
+  %71 = nn.dense(%70, meta[relay.Constant][12] /* ty=Tensor[(768, 3072), float16] */, units=768, out_dtype="float16") /* ty=Tensor[(7, 768), float16] */;
+  %72 = add(%71, meta[relay.Constant][13] /* ty=Tensor[(768), float16] */) /* ty=Tensor[(7, 768), float16] */;
+  %73 = reshape(%72, newshape=[1, 7, 768]) /* ty=Tensor[(1, 7, 768), float16] */;
+  %74 = nn.dropout(%73, rate=0.1f) /* ty=(Tensor[(1, 7, 768), float16], Tensor[(1, 7, 768), float16]) */;
+  %75 = %74.0 /* ty=Tensor[(1, 7, 768), float16] */;
+  %76 = cast(%75, dtype="float32") /* ty=Tensor[(1, 7, 768), float32] */;
+  %77 = add(%53, %76) /* ty=Tensor[(1, 7, 768), float32] */;
+  %78 = nn.layer_norm(%77, meta[relay.Constant][14] /* ty=Tensor[(768), float32] */, meta[relay.Constant][15] /* ty=Tensor[(768), float32] */) /* ty=Tensor[(1, 7, 768), float32] */;
+  %79 = reshape(%78, newshape=[-1, 768]) /* ty=Tensor[(7, 768), float32] */;
+  %80 = cast(%79, dtype="float16") /* ty=Tensor[(7, 768), float16] */;
+  %81 = nn.dense(%80, meta[relay.Constant][16] /* ty=Tensor[(2304, 768), float16] */, units=2304, out_dtype="float16") /* ty=Tensor[(7, 2304), float16] */;
+  %82 = add(%81, meta[relay.Constant][17] /* ty=Tensor[(2304), float16] */) /* ty=Tensor[(7, 2304), float16] */;
+  %83 = reshape(%82, newshape=[1, 7, 2304]) /* ty=Tensor[(1, 7, 2304), float16] */;
+  %84 = split(%83, indices_or_sections=[768, 1536], axis=2) /* ty=(Tensor[(1, 7, 768), float16], Tensor[(1, 7, 768), float16], Tensor[(1, 7, 768), float16]) */;
+  %85 = %84.0 /* ty=Tensor[(1, 7, 768), float16] */;
+  %86 = reshape(%85, newshape=[1, 7, 12, 64]) /* ty=Tensor[(1, 7, 12, 64), float16] */;
+  %87 = transpose(%86, axes=[0, 2, 1, 3]) /* ty=Tensor[(1, 12, 7, 64), float16] */;
+  %88 = broadcast_to(%87, shape=[1, 12, 7, 64], dtype="float16") /* ty=Tensor[(1, 12, 7, 64), float16] */;
+  %89 = %84.1 /* ty=Tensor[(1, 7, 768), float16] */;
+  %90 = reshape(%89, newshape=[1, 7, 12, 64]) /* ty=Tensor[(1, 7, 12, 64), float16] */;
+  %91 = transpose(%90, axes=[0, 2, 3, 1]) /* ty=Tensor[(1, 12, 64, 7), float16] */;
+  %92 = broadcast_to(%91, shape=[1, 12, 64, 7], dtype="float16") /* ty=Tensor[(1, 12, 64, 7), float16] */;
+  %93 = reshape(%88, newshape=[-1, 7, 64]) /* ty=Tensor[(12, 7, 64), float16] */;
+  %94 = reshape(%92, newshape=[-1, 64, 7]) /* ty=Tensor[(12, 64, 7), float16] */;
+  %95 = nn.batch_matmul(%93, %94, out_dtype="float16") /* ty=Tensor[(12, 7, 7), float16] */;
+  %96 = reshape(%95, newshape=[1, 12, 7, 7]) /* ty=Tensor[(1, 12, 7, 7), float16] */;
+  %97 = squeeze(%96, axis=[]) /* ty=Tensor[(1, 12, 7, 7), float16] */;
+  %98 = divide(%97, 8f16 /* ty=float16 */) /* ty=Tensor[(1, 12, 7, 7), float16] */;
+  %99 = multiply(%98, meta[relay.Constant][18] /* ty=Tensor[(1, 1, 7, 7), float16] */) /* ty=Tensor[(1, 12, 7, 7), float16] */;
+  %100 = add(%99, meta[relay.Constant][19] /* ty=Tensor[(1, 1, 7, 7), float16] */) /* ty=Tensor[(1, 12, 7, 7), float16] */;
+  %101 = cast(%100, dtype="float32") /* ty=Tensor[(1, 12, 7, 7), float32] */;
+  %102 = nn.softmax(%101) /* ty=Tensor[(1, 12, 7, 7), float32] */;
+  %103 = nn.dropout(%102, rate=0.1f) /* ty=(Tensor[(1, 12, 7, 7), float32], Tensor[(1, 12, 7, 7), float32]) */;
+  %104 = %103.0 /* ty=Tensor[(1, 12, 7, 7), float32] */;
+  %105 = broadcast_to(%104, shape=[1, 12, 7, 7]) /* ty=Tensor[(1, 12, 7, 7), float32] */;
+  %106 = reshape(%105, newshape=[-1, 7, 7]) /* ty=Tensor[(12, 7, 7), float32] */;
+  %107 = %84.2 /* ty=Tensor[(1, 7, 768), float16] */;
+  %108 = reshape(%107, newshape=[1, 7, 12, 64]) /* ty=Tensor[(1, 7, 12, 64), float16] */;
+  %109 = transpose(%108, axes=[0, 2, 1, 3]) /* ty=Tensor[(1, 12, 7, 64), float16] */;
+  %110 = broadcast_to(%109, shape=[1, 12, 7, 64], dtype="float16") /* ty=Tensor[(1, 12, 7, 64), float16] */;
+  %111 = cast(%106, dtype="float16") /* ty=Tensor[(12, 7, 7), float16] */;
+  %112 = reshape(%110, newshape=[-1, 7, 64]) /* ty=Tensor[(12, 7, 64), float16] */;
+  %113 = nn.batch_matmul(%111, %112, out_dtype="float16") /* ty=Tensor[(12, 7, 64), float16] */;
+  %114 = reshape(%113, newshape=[1, 12, 7, 64]) /* ty=Tensor[(1, 12, 7, 64), float16] */;
+  %115 = squeeze(%114, axis=[]) /* ty=Tensor[(1, 12, 7, 64), float16] */;
+  %116 = transpose(%115, axes=[0, 2, 1, 3]) /* ty=Tensor[(1, 7, 12, 64), float16] */;
+  %117 = reshape(%116, newshape=[1, 7, 768]) /* ty=Tensor[(1, 7, 768), float16] */;
+  %118 = reshape(%117, newshape=[-1, 768]) /* ty=Tensor[(7, 768), float16] */;
+  %119 = nn.dense(%118, meta[relay.Constant][20] /* ty=Tensor[(768, 768), float16] */, units=768, out_dtype="float16") /* ty=Tensor[(7, 768), float16] */;
+  %120 = add(%119, meta[relay.Constant][21] /* ty=Tensor[(768), float16] */) /* ty=Tensor[(7, 768), float16] */;
+  %121 = reshape(%120, newshape=[1, 7, 768]) /* ty=Tensor[(1, 7, 768), float16] */;
+  %122 = nn.dropout(%121, rate=0.1f) /* ty=(Tensor[(1, 7, 768), float16], Tensor[(1, 7, 768), float16]) */;
+  %123 = %122.0 /* ty=Tensor[(1, 7, 768), float16] */;
+  %124 = cast(%123, dtype="float32") /* ty=Tensor[(1, 7, 768), float32] */;
+  %125 = add(%78, %124) /* ty=Tensor[(1, 7, 768), float32] */;
+  %126 = nn.layer_norm(%125, meta[relay.Constant][22] /* ty=Tensor[(768), float32] */, meta[relay.Constant][23] /* ty=Tensor[(768), float32] */) /* ty=Tensor[(1, 7, 768), float32] */;
+  %127 = reshape(%126, newshape=[-1, 768]) /* ty=Tensor[(7, 768), float32] */;
+  %128 = cast(%127, dtype="float16") /* ty=Tensor[(7, 768), float16] */;
+  %129 = nn.dense(%128, meta[relay.Constant][24] /* ty=Tensor[(3072, 768), float16] */, units=3072, out_dtype="float16") /* ty=Tensor[(7, 3072), float16] */;
+  %130 = add(%129, meta[relay.Constant][25] /* ty=Tensor[(3072), float16] */) /* ty=Tensor[(7, 3072), float16] */;
+  %131 = reshape(%130, newshape=[1, 7, 3072]) /* ty=Tensor[(1, 7, 3072), float16] */;
+  %132 = multiply(%131, 0.5f16 /* ty=float16 */) /* ty=Tensor[(1, 7, 3072), float16] */;
+  %133 = cast(%131, dtype="float32") /* ty=Tensor[(1, 7, 3072), float32] */;
+  %134 = power(%133, 3f /* ty=float32 */) /* ty=Tensor[(1, 7, 3072), float32] */;
+  %135 = multiply(%134, 0.044715f /* ty=float32 */) /* ty=Tensor[(1, 7, 3072), float32] */;
+  %136 = add(%133, %135) /* ty=Tensor[(1, 7, 3072), float32] */;
+  %137 = multiply(%136, 0.797885f /* ty=float32 */) /* ty=Tensor[(1, 7, 3072), float32] */;
+  %138 = tanh(%137) /* ty=Tensor[(1, 7, 3072), float32] */;
+  %139 = cast(%132, dtype="float32") /* ty=Tensor[(1, 7, 3072), float32] */;
+  %140 = add(%138, 1f /* ty=float32 */) /* ty=Tensor[(1, 7, 3072), float32] */;
+  %141 = multiply(%139, %140) /* ty=Tensor[(1, 7, 3072), float32] */;
+  %142 = reshape(%141, newshape=[-1, 3072]) /* ty=Tensor[(7, 3072), float32] */;
+  %143 = cast(%142, dtype="float16") /* ty=Tensor[(7, 3072), float16] */;
+  %144 = nn.dense(%143, meta[relay.Constant][26] /* ty=Tensor[(768, 3072), float16] */, units=768, out_dtype="float16") /* ty=Tensor[(7, 768), float16] */;
+  %145 = add(%144, meta[relay.Constant][27] /* ty=Tensor[(768), float16] */) /* ty=Tensor[(7, 768), float16] */;
+  %146 = reshape(%145, newshape=[1, 7, 768]) /* ty=Tensor[(1, 7, 768), float16] */;
+  %147 = nn.dropout(%146, rate=0.1f) /* ty=(Tensor[(1, 7, 768), float16], Tensor[(1, 7, 768), float16]) */;
+  %148 = %147.0 /* ty=Tensor[(1, 7, 768), float16] */;
+  %149 = cast(%148, dtype="float32") /* ty=Tensor[(1, 7, 768), float32] */;
+  %150 = add(%126, %149) /* ty=Tensor[(1, 7, 768), float32] */;
+  %151 = nn.layer_norm(%150, meta[relay.Constant][28] /* ty=Tensor[(768), float32] */, meta[relay.Constant][29] /* ty=Tensor[(768), float32] */) /* ty=Tensor[(1, 7, 768), float32] */;
+  %152 = reshape(%151, newshape=[-1, 768]) /* ty=Tensor[(7, 768), float32] */;
+  %153 = cast(%152, dtype="float16") /* ty=Tensor[(7, 768), float16] */;
+  %154 = nn.dense(%153, meta[relay.Constant][30] /* ty=Tensor[(2304, 768), float16] */, units=2304, out_dtype="float16") /* ty=Tensor[(7, 2304), float16] */;
+  %155 = add(%154, meta[relay.Constant][31] /* ty=Tensor[(2304), float16] */) /* ty=Tensor[(7, 2304), float16] */;
+  %156 = reshape(%155, newshape=[1, 7, 2304]) /* ty=Tensor[(1, 7, 2304), float16] */;
+  %157 = split(%156, indices_or_sections=[768, 1536], axis=2) /* ty=(Tensor[(1, 7, 768), float16], Tensor[(1, 7, 768), float16], Tensor[(1, 7, 768), float16]) */;
+  %158 = %157.0 /* ty=Tensor[(1, 7, 768), float16] */;
+  %159 = reshape(%158, newshape=[1, 7, 12, 64]) /* ty=Tensor[(1, 7, 12, 64), float16] */;
+  %160 = transpose(%159, axes=[0, 2, 1, 3]) /* ty=Tensor[(1, 12, 7, 64), float16] */;
+  %161 = broadcast_to(%160, shape=[1, 12, 7, 64], dtype="float16") /* ty=Tensor[(1, 12, 7, 64), float16] */;
+  %162 = %157.1 /* ty=Tensor[(1, 7, 768), float16] */;
+  %163 = reshape(%162, newshape=[1, 7, 12, 64]) /* ty=Tensor[(1, 7, 12, 64), float16] */;
+  %164 = transpose(%163, axes=[0, 2, 3, 1]) /* ty=Tensor[(1, 12, 64, 7), float16] */;
+  %165 = broadcast_to(%164, shape=[1, 12, 64, 7], dtype="float16") /* ty=Tensor[(1, 12, 64, 7), float16] */;
+  %166 = reshape(%161, newshape=[-1, 7, 64]) /* ty=Tensor[(12, 7, 64), float16] */;
+  %167 = reshape(%165, newshape=[-1, 64, 7]) /* ty=Tensor[(12, 64, 7), float16] */;
+  %168 = nn.batch_matmul(%166, %167, out_dtype="float16") /* ty=Tensor[(12, 7, 7), float16] */;
+  %169 = reshape(%168, newshape=[1, 12, 7, 7]) /* ty=Tensor[(1, 12, 7, 7), float16] */;
+  %170 = squeeze(%169, axis=[]) /* ty=Tensor[(1, 12, 7, 7), float16] */;
+  %171 = divide(%170, 8f16 /* ty=float16 */) /* ty=Tensor[(1, 12, 7, 7), float16] */;
+  %172 = multiply(%171, meta[relay.Constant][32] /* ty=Tensor[(1, 1, 7, 7), float16] */) /* ty=Tensor[(1, 12, 7, 7), float16] */;
+  %173 = add(%172, meta[relay.Constant][33] /* ty=Tensor[(1, 1, 7, 7), float16] */) /* ty=Tensor[(1, 12, 7, 7), float16] */;
+  %174 = cast(%173, dtype="float32") /* ty=Tensor[(1, 12, 7, 7), float32] */;
+  %175 = nn.softmax(%174) /* ty=Tensor[(1, 12, 7, 7), float32] */;
+  %176 = nn.dropout(%175, rate=0.1f) /* ty=(Tensor[(1, 12, 7, 7), float32], Tensor[(1, 12, 7, 7), float32]) */;
+  %177 = %176.0 /* ty=Tensor[(1, 12, 7, 7), float32] */;
+  %178 = broadcast_to(%177, shape=[1, 12, 7, 7]) /* ty=Tensor[(1, 12, 7, 7), float32] */;
+  %179 = reshape(%178, newshape=[-1, 7, 7]) /* ty=Tensor[(12, 7, 7), float32] */;
+  %180 = %157.2 /* ty=Tensor[(1, 7, 768), float16] */;
+  %181 = reshape(%180, newshape=[1, 7, 12, 64]) /* ty=Tensor[(1, 7, 12, 64), float16] */;
+  %182 = transpose(%181, axes=[0, 2, 1, 3]) /* ty=Tensor[(1, 12, 7, 64), float16] */;
+  %183 = broadcast_to(%182, shape=[1, 12, 7, 64], dtype="float16") /* ty=Tensor[(1, 12, 7, 64), float16] */;
+  %184 = cast(%179, dtype="float16") /* ty=Tensor[(12, 7, 7), float16] */;
+  %185 = reshape(%183, newshape=[-1, 7, 64]) /* ty=Tensor[(12, 7, 64), float16] */;
+  %186 = nn.batch_matmul(%184, %185, out_dtype="float16") /* ty=Tensor[(12, 7, 64), float16] */;
+  %187 = reshape(%186, newshape=[1, 12, 7, 64]) /* ty=Tensor[(1, 12, 7, 64), float16] */;
+  %188 = squeeze(%187, axis=[]) /* ty=Tensor[(1, 12, 7, 64), float16] */;
+  %189 = transpose(%188, axes=[0, 2, 1, 3]) /* ty=Tensor[(1, 7, 12, 64), float16] */;
+  %190 = reshape(%189, newshape=[1, 7, 768]) /* ty=Tensor[(1, 7, 768), float16] */;
+  %191 = reshape(%190, newshape=[-1, 768]) /* ty=Tensor[(7, 768), float16] */;
+  %192 = nn.dense(%191, meta[relay.Constant][34] /* ty=Tensor[(768, 768), float16] */, units=768, out_dtype="float16") /* ty=Tensor[(7, 768), float16] */;
+  %193 = add(%192, meta[relay.Constant][35] /* ty=Tensor[(768), float16] */) /* ty=Tensor[(7, 768), float16] */;
+  %194 = reshape(%193, newshape=[1, 7, 768]) /* ty=Tensor[(1, 7, 768), float16] */;
+  %195 = nn.dropout(%194, rate=0.1f) /* ty=(Tensor[(1, 7, 768), float16], Tensor[(1, 7, 768), float16]) */;
+  %196 = %195.0 /* ty=Tensor[(1, 7, 768), float16] */;
+  %197 = cast(%196, dtype="float32") /* ty=Tensor[(1, 7, 768), float32] */;
+  %198 = add(%151, %197) /* ty=Tensor[(1, 7, 768), float32] */;
+  %199 = nn.layer_norm(%198, meta[relay.Constant][36] /* ty=Tensor[(768), float32] */, meta[relay.Constant][37] /* ty=Tensor[(768), float32] */) /* ty=Tensor[(1, 7, 768), float32] */;
+  %200 = reshape(%199, newshape=[-1, 768]) /* ty=Tensor[(7, 768), float32] */;
+  %201 = cast(%200, dtype="float16") /* ty=Tensor[(7, 768), float16] */;
+  %202 = nn.dense(%201, meta[relay.Constant][38] /* ty=Tensor[(3072, 768), float16] */, units=3072, out_dtype="float16") /* ty=Tensor[(7, 3072), float16] */;
+  %203 = add(%202, meta[relay.Constant][39] /* ty=Tensor[(3072), float16] */) /* ty=Tensor[(7, 3072), float16] */;
+  %204 = reshape(%203, newshape=[1, 7, 3072]) /* ty=Tensor[(1, 7, 3072), float16] */;
+  %205 = multiply(%204, 0.5f16 /* ty=float16 */) /* ty=Tensor[(1, 7, 3072), float16] */;
+  %206 = cast(%204, dtype="float32") /* ty=Tensor[(1, 7, 3072), float32] */;
+  %207 = power(%206, 3f /* ty=float32 */) /* ty=Tensor[(1, 7, 3072), float32] */;
+  %208 = multiply(%207, 0.044715f /* ty=float32 */) /* ty=Tensor[(1, 7, 3072), float32] */;
+  %209 = add(%206, %208) /* ty=Tensor[(1, 7, 3072), float32] */;
+  %210 = multiply(%209, 0.797885f /* ty=float32 */) /* ty=Tensor[(1, 7, 3072), float32] */;
+  %211 = tanh(%210) /* ty=Tensor[(1, 7, 3072), float32] */;
+  %212 = cast(%205, dtype="float32") /* ty=Tensor[(1, 7, 3072), float32] */;
+  %213 = add(%211, 1f /* ty=float32 */) /* ty=Tensor[(1, 7, 3072), float32] */;
+  %214 = multiply(%212, %213) /* ty=Tensor[(1, 7, 3072), float32] */;
+  %215 = reshape(%214, newshape=[-1, 3072]) /* ty=Tensor[(7, 3072), float32] */;
+  %216 = cast(%215, dtype="float16") /* ty=Tensor[(7, 3072), float16] */;
+  %217 = nn.dense(%216, meta[relay.Constant][40] /* ty=Tensor[(768, 3072), float16] */, units=768, out_dtype="float16") /* ty=Tensor[(7, 768), float16] */;
+  %218 = add(%217, meta[relay.Constant][41] /* ty=Tensor[(768), float16] */) /* ty=Tensor[(7, 768), float16] */;
+  %219 = reshape(%218, newshape=[1, 7, 768]) /* ty=Tensor[(1, 7, 768), float16] */;
+  %220 = nn.dropout(%219, rate=0.1f) /* ty=(Tensor[(1, 7, 768), float16], Tensor[(1, 7, 768), float16]) */;
+  %221 = %220.0 /* ty=Tensor[(1, 7, 768), float16] */;
+  %222 = cast(%221, dtype="float32") /* ty=Tensor[(1, 7, 768), float32] */;
+  %223 = add(%199, %222) /* ty=Tensor[(1, 7, 768), float32] */;
+  %224 = nn.layer_norm(%223, meta[relay.Constant][42] /* ty=Tensor[(768), float32] */, meta[relay.Constant][43] /* ty=Tensor[(768), float32] */) /* ty=Tensor[(1, 7, 768), float32] */;
+  %225 = reshape(%224, newshape=[-1, 768]) /* ty=Tensor[(7, 768), float32] */;
+  %226 = cast(%225, dtype="float16") /* ty=Tensor[(7, 768), float16] */;
+  %227 = nn.dense(%226, meta[relay.Constant][44] /* ty=Tensor[(2304, 768), float16] */, units=2304, out_dtype="float16") /* ty=Tensor[(7, 2304), float16] */;
+  %228 = add(%227, meta[relay.Constant][45] /* ty=Tensor[(2304), float16] */) /* ty=Tensor[(7, 2304), float16] */;
+  %229 = reshape(%228, newshape=[1, 7, 2304]) /* ty=Tensor[(1, 7, 2304), float16] */;
+  %230 = split(%229, indices_or_sections=[768, 1536], axis=2) /* ty=(Tensor[(1, 7, 768), float16], Tensor[(1, 7, 768), float16], Tensor[(1, 7, 768), float16]) */;
+  %231 = %230.0 /* ty=Tensor[(1, 7, 768), float16] */;
+  %232 = reshape(%231, newshape=[1, 7, 12, 64]) /* ty=Tensor[(1, 7, 12, 64), float16] */;
+  %233 = transpose(%232, axes=[0, 2, 1, 3]) /* ty=Tensor[(1, 12, 7, 64), float16] */;
+  %234 = broadcast_to(%233, shape=[1, 12, 7, 64], dtype="float16") /* ty=Tensor[(1, 12, 7, 64), float16] */;
+  %235 = %230.1 /* ty=Tensor[(1, 7, 768), float16] */;
+  %236 = reshape(%235, newshape=[1, 7, 12, 64]) /* ty=Tensor[(1, 7, 12, 64), float16] */;
+  %237 = transpose(%236, axes=[0, 2, 3, 1]) /* ty=Tensor[(1, 12, 64, 7), float16] */;
+  %238 = broadcast_to(%237, shape=[1, 12, 64, 7], dtype="float16") /* ty=Tensor[(1, 12, 64, 7), float16] */;
+  %239 = reshape(%234, newshape=[-1, 7, 64]) /* ty=Tensor[(12, 7, 64), float16] */;
+  %240 = reshape(%238, newshape=[-1, 64, 7]) /* ty=Tensor[(12, 64, 7), float16] */;
+  %241 = nn.batch_matmul(%239, %240, out_dtype="float16") /* ty=Tensor[(12, 7, 7), float16] */;
+  %242 = reshape(%241, newshape=[1, 12, 7, 7]) /* ty=Tensor[(1, 12, 7, 7), float16] */;
+  %243 = squeeze(%242, axis=[]) /* ty=Tensor[(1, 12, 7, 7), float16] */;
+  %244 = divide(%243, 8f16 /* ty=float16 */) /* ty=Tensor[(1, 12, 7, 7), float16] */;
+  %245 = multiply(%244, meta[relay.Constant][46] /* ty=Tensor[(1, 1, 7, 7), float16] */) /* ty=Tensor[(1, 12, 7, 7), float16] */;
+  %246 = add(%245, meta[relay.Constant][47] /* ty=Tensor[(1, 1, 7, 7), float16] */) /* ty=Tensor[(1, 12, 7, 7), float16] */;
+  %247 = cast(%246, dtype="float32") /* ty=Tensor[(1, 12, 7, 7), float32] */;
+  %248 = nn.softmax(%247) /* ty=Tensor[(1, 12, 7, 7), float32] */;
+  %249 = nn.dropout(%248, rate=0.1f) /* ty=(Tensor[(1, 12, 7, 7), float32], Tensor[(1, 12, 7, 7), float32]) */;
+  %250 = %249.0 /* ty=Tensor[(1, 12, 7, 7), float32] */;
+  %251 = broadcast_to(%250, shape=[1, 12, 7, 7]) /* ty=Tensor[(1, 12, 7, 7), float32] */;
+  %252 = reshape(%251, newshape=[-1, 7, 7]) /* ty=Tensor[(12, 7, 7), float32] */;
+  %253 = %230.2 /* ty=Tensor[(1, 7, 768), float16] */;
+  %254 = reshape(%253, newshape=[1, 7, 12, 64]) /* ty=Tensor[(1, 7, 12, 64), float16] */;
+  %255 = transpose(%254, axes=[0, 2, 1, 3]) /* ty=Tensor[(1, 12, 7, 64), float16] */;
+  %256 = broadcast_to(%255, shape=[1, 12, 7, 64], dtype="float16") /* ty=Tensor[(1, 12, 7, 64), float16] */;
+  %257 = cast(%252, dtype="float16") /* ty=Tensor[(12, 7, 7), float16] */;
+  %258 = reshape(%256, newshape=[-1, 7, 64]) /* ty=Tensor[(12, 7, 64), float16] */;
+  %259 = nn.batch_matmul(%257, %258, out_dtype="float16") /* ty=Tensor[(12, 7, 64), float16] */;
+  %260 = reshape(%259, newshape=[1, 12, 7, 64]) /* ty=Tensor[(1, 12, 7, 64), float16] */;
+  %261 = squeeze(%260, axis=[]) /* ty=Tensor[(1, 12, 7, 64), float16] */;
+  %262 = transpose(%261, axes=[0, 2, 1, 3]) /* ty=Tensor[(1, 7, 12, 64), float16] */;
+  %263 = reshape(%262, newshape=[1, 7, 768]) /* ty=Tensor[(1, 7, 768), float16] */;
+  %264 = reshape(%263, newshape=[-1, 768]) /* ty=Tensor[(7, 768), float16] */;
+  %265 = nn.dense(%264, meta[relay.Constant][48] /* ty=Tensor[(768, 768), float16] */, units=768, out_dtype="float16") /* ty=Tensor[(7, 768), float16] */;
+  %266 = add(%265, meta[relay.Constant][49] /* ty=Tensor[(768), float16] */) /* ty=Tensor[(7, 768), float16] */;
+  %267 = reshape(%266, newshape=[1, 7, 768]) /* ty=Tensor[(1, 7, 768), float16] */;
+  %268 = nn.dropout(%267, rate=0.1f) /* ty=(Tensor[(1, 7, 768), float16], Tensor[(1, 7, 768), float16]) */;
+  %269 = %268.0 /* ty=Tensor[(1, 7, 768), float16] */;
+  %270 = cast(%269, dtype="float32") /* ty=Tensor[(1, 7, 768), float32] */;
+  %271 = add(%224, %270) /* ty=Tensor[(1, 7, 768), float32] */;
+  %272 = nn.layer_norm(%271, meta[relay.Constant][50] /* ty=Tensor[(768), float32] */, meta[relay.Constant][51] /* ty=Tensor[(768), float32] */) /* ty=Tensor[(1, 7, 768), float32] */;
+  %273 = reshape(%272, newshape=[-1, 768]) /* ty=Tensor[(7, 768), float32] */;
+  %274 = cast(%273, dtype="float16") /* ty=Tensor[(7, 768), float16] */;
+  %275 = nn.dense(%274, meta[relay.Constant][52] /* ty=Tensor[(3072, 768), float16] */, units=3072, out_dtype="float16") /* ty=Tensor[(7, 3072), float16] */;
+  %276 = add(%275, meta[relay.Constant][53] /* ty=Tensor[(3072), float16] */) /* ty=Tensor[(7, 3072), float16] */;
+  %277 = reshape(%276, newshape=[1, 7, 3072]) /* ty=Tensor[(1, 7, 3072), float16] */;
+  %278 = multiply(%277, 0.5f16 /* ty=float16 */) /* ty=Tensor[(1, 7, 3072), float16] */;
+  %279 = cast(%277, dtype="float32") /* ty=Tensor[(1, 7, 3072), float32] */;
+  %280 = power(%279, 3f /* ty=float32 */) /* ty=Tensor[(1, 7, 3072), float32] */;
+  %281 = multiply(%280, 0.044715f /* ty=float32 */) /* ty=Tensor[(1, 7, 3072), float32] */;
+  %282 = add(%279, %281) /* ty=Tensor[(1, 7, 3072), float32] */;
+  %283 = multiply(%282, 0.797885f /* ty=float32 */) /* ty=Tensor[(1, 7, 3072), float32] */;
+  %284 = tanh(%283) /* ty=Tensor[(1, 7, 3072), float32] */;
+  %285 = cast(%278, dtype="float32") /* ty=Tensor[(1, 7, 3072), float32] */;
+  %286 = add(%284, 1f /* ty=float32 */) /* ty=Tensor[(1, 7, 3072), float32] */;
+  %287 = multiply(%285, %286) /* ty=Tensor[(1, 7, 3072), float32] */;
+  %288 = reshape(%287, newshape=[-1, 3072]) /* ty=Tensor[(7, 3072), float32] */;
+  %289 = cast(%288, dtype="float16") /* ty=Tensor[(7, 3072), float16] */;
+  %290 = nn.dense(%289, meta[relay.Constant][54] /* ty=Tensor[(768, 3072), float16] */, units=768, out_dtype="float16") /* ty=Tensor[(7, 768), float16] */;
+  %291 = add(%290, meta[relay.Constant][55] /* ty=Tensor[(768), float16] */) /* ty=Tensor[(7, 768), float16] */;
+  %292 = reshape(%291, newshape=[1, 7, 768]) /* ty=Tensor[(1, 7, 768), float16] */;
+  %293 = nn.dropout(%292, rate=0.1f) /* ty=(Tensor[(1, 7, 768), float16], Tensor[(1, 7, 768), float16]) */;
+  %294 = %293.0 /* ty=Tensor[(1, 7, 768), float16] */;
+  %295 = cast(%294, dtype="float32") /* ty=Tensor[(1, 7, 768), float32] */;
+  %296 = add(%272, %295) /* ty=Tensor[(1, 7, 768), float32] */;
+  %297 = nn.layer_norm(%296, meta[relay.Constant][56] /* ty=Tensor[(768), float32] */, meta[relay.Constant][57] /* ty=Tensor[(768), float32] */) /* ty=Tensor[(1, 7, 768), float32] */;
+  %298 = reshape(%297, newshape=[-1, 768]) /* ty=Tensor[(7, 768), float32] */;
+  %299 = cast(%298, dtype="float16") /* ty=Tensor[(7, 768), float16] */;
+  %300 = nn.dense(%299, meta[relay.Constant][58] /* ty=Tensor[(2304, 768), float16] */, units=2304, out_dtype="float16") /* ty=Tensor[(7, 2304), float16] */;
+  %301 = add(%300, meta[relay.Constant][59] /* ty=Tensor[(2304), float16] */) /* ty=Tensor[(7, 2304), float16] */;
+  %302 = reshape(%301, newshape=[1, 7, 2304]) /* ty=Tensor[(1, 7, 2304), float16] */;
+  %303 = split(%302, indices_or_sections=[768, 1536], axis=2) /* ty=(Tensor[(1, 7, 768), float16], Tensor[(1, 7, 768), float16], Tensor[(1, 7, 768), float16]) */;
+  %304 = %303.0 /* ty=Tensor[(1, 7, 768), float16] */;
+  %305 = reshape(%304, newshape=[1, 7, 12, 64]) /* ty=Tensor[(1, 7, 12, 64), float16] */;
+  %306 = transpose(%305, axes=[0, 2, 1, 3]) /* ty=Tensor[(1, 12, 7, 64), float16] */;
+  %307 = broadcast_to(%306, shape=[1, 12, 7, 64], dtype="float16") /* ty=Tensor[(1, 12, 7, 64), float16] */;
+  %308 = %303.1 /* ty=Tensor[(1, 7, 768), float16] */;
+  %309 = reshape(%308, newshape=[1, 7, 12, 64]) /* ty=Tensor[(1, 7, 12, 64), float16] */;
+  %310 = transpose(%309, axes=[0, 2, 3, 1]) /* ty=Tensor[(1, 12, 64, 7), float16] */;
+  %311 = broadcast_to(%310, shape=[1, 12, 64, 7], dtype="float16") /* ty=Tensor[(1, 12, 64, 7), float16] */;
+  %312 = reshape(%307, newshape=[-1, 7, 64]) /* ty=Tensor[(12, 7, 64), float16] */;
+  %313 = reshape(%311, newshape=[-1, 64, 7]) /* ty=Tensor[(12, 64, 7), float16] */;
+  %314 = nn.batch_matmul(%312, %313, out_dtype="float16") /* ty=Tensor[(12, 7, 7), float16] */;
+  %315 = reshape(%314, newshape=[1, 12, 7, 7]) /* ty=Tensor[(1, 12, 7, 7), float16] */;
+  %316 = squeeze(%315, axis=[]) /* ty=Tensor[(1, 12, 7, 7), float16] */;
+  %317 = divide(%316, 8f16 /* ty=float16 */) /* ty=Tensor[(1, 12, 7, 7), float16] */;
+  %318 = multiply(%317, meta[relay.Constant][60] /* ty=Tensor[(1, 1, 7, 7), float16] */) /* ty=Tensor[(1, 12, 7, 7), float16] */;
+  %319 = add(%318, meta[relay.Constant][61] /* ty=Tensor[(1, 1, 7, 7), float16] */) /* ty=Tensor[(1, 12, 7, 7), float16] */;
+  %320 = cast(%319, dtype="float32") /* ty=Tensor[(1, 12, 7, 7), float32] */;
+  %321 = nn.softmax(%320) /* ty=Tensor[(1, 12, 7, 7), float32] */;
+  %322 = nn.dropout(%321, rate=0.1f) /* ty=(Tensor[(1, 12, 7, 7), float32], Tensor[(1, 12, 7, 7), float32]) */;
+  %323 = %322.0 /* ty=Tensor[(1, 12, 7, 7), float32] */;
+  %324 = broadcast_to(%323, shape=[1, 12, 7, 7]) /* ty=Tensor[(1, 12, 7, 7), float32] */;
+  %325 = reshape(%324, newshape=[-1, 7, 7]) /* ty=Tensor[(12, 7, 7), float32] */;
+  %326 = %303.2 /* ty=Tensor[(1, 7, 768), float16] */;
+  %327 = reshape(%326, newshape=[1, 7, 12, 64]) /* ty=Tensor[(1, 7, 12, 64), float16] */;
+  %328 = transpose(%327, axes=[0, 2, 1, 3]) /* ty=Tensor[(1, 12, 7, 64), float16] */;
+  %329 = broadcast_to(%328, shape=[1, 12, 7, 64], dtype="float16") /* ty=Tensor[(1, 12, 7, 64), float16] */;
+  %330 = cast(%325, dtype="float16") /* ty=Tensor[(12, 7, 7), float16] */;
+  %331 = reshape(%329, newshape=[-1, 7, 64]) /* ty=Tensor[(12, 7, 64), float16] */;
+  %332 = nn.batch_matmul(%330, %331, out_dtype="float16") /* ty=Tensor[(12, 7, 64), float16] */;
+  %333 = reshape(%332, newshape=[1, 12, 7, 64]) /* ty=Tensor[(1, 12, 7, 64), float16] */;
+  %334 = squeeze(%333, axis=[]) /* ty=Tensor[(1, 12, 7, 64), float16] */;
+  %335 = transpose(%334, axes=[0, 2, 1, 3]) /* ty=Tensor[(1, 7, 12, 64), float16] */;
+  %336 = reshape(%335, newshape=[1, 7, 768]) /* ty=Tensor[(1, 7, 768), float16] */;
+  %337 = reshape(%336, newshape=[-1, 768]) /* ty=Tensor[(7, 768), float16] */;
+  %338 = nn.dense(%337, meta[relay.Constant][62] /* ty=Tensor[(768, 768), float16] */, units=768, out_dtype="float16") /* ty=Tensor[(7, 768), float16] */;
+  %339 = add(%338, meta[relay.Constant][63] /* ty=Tensor[(768), float16] */) /* ty=Tensor[(7, 768), float16] */;
+  %340 = reshape(%339, newshape=[1, 7, 768]) /* ty=Tensor[(1, 7, 768), float16] */;
+  %341 = nn.dropout(%340, rate=0.1f) /* ty=(Tensor[(1, 7, 768), float16], Tensor[(1, 7, 768), float16]) */;
+  %342 = %341.0 /* ty=Tensor[(1, 7, 768), float16] */;
+  %343 = cast(%342, dtype="float32") /* ty=Tensor[(1, 7, 768), float32] */;
+  %344 = add(%297, %343) /* ty=Tensor[(1, 7, 768), float32] */;
+  %345 = nn.layer_norm(%344, meta[relay.Constant][64] /* ty=Tensor[(768), float32] */, meta[relay.Constant][65] /* ty=Tensor[(768), float32] */) /* ty=Tensor[(1, 7, 768), float32] */;
+  %346 = reshape(%345, newshape=[-1, 768]) /* ty=Tensor[(7, 768), float32] */;
+  %347 = cast(%346, dtype="float16") /* ty=Tensor[(7, 768), float16] */;
+  %348 = nn.dense(%347, meta[relay.Constant][66] /* ty=Tensor[(3072, 768), float16] */, units=3072, out_dtype="float16") /* ty=Tensor[(7, 3072), float16] */;
+  %349 = add(%348, meta[relay.Constant][67] /* ty=Tensor[(3072), float16] */) /* ty=Tensor[(7, 3072), float16] */;
+  %350 = reshape(%349, newshape=[1, 7, 3072]) /* ty=Tensor[(1, 7, 3072), float16] */;
+  %351 = multiply(%350, 0.5f16 /* ty=float16 */) /* ty=Tensor[(1, 7, 3072), float16] */;
+  %352 = cast(%350, dtype="float32") /* ty=Tensor[(1, 7, 3072), float32] */;
+  %353 = power(%352, 3f /* ty=float32 */) /* ty=Tensor[(1, 7, 3072), float32] */;
+  %354 = multiply(%353, 0.044715f /* ty=float32 */) /* ty=Tensor[(1, 7, 3072), float32] */;
+  %355 = add(%352, %354) /* ty=Tensor[(1, 7, 3072), float32] */;
+  %356 = multiply(%355, 0.797885f /* ty=float32 */) /* ty=Tensor[(1, 7, 3072), float32] */;
+  %357 = tanh(%356) /* ty=Tensor[(1, 7, 3072), float32] */;
+  %358 = cast(%351, dtype="float32") /* ty=Tensor[(1, 7, 3072), float32] */;
+  %359 = add(%357, 1f /* ty=float32 */) /* ty=Tensor[(1, 7, 3072), float32] */;
+  %360 = multiply(%358, %359) /* ty=Tensor[(1, 7, 3072), float32] */;
+  %361 = reshape(%360, newshape=[-1, 3072]) /* ty=Tensor[(7, 3072), float32] */;
+  %362 = cast(%361, dtype="float16") /* ty=Tensor[(7, 3072), float16] */;
+  %363 = nn.dense(%362, meta[relay.Constant][68] /* ty=Tensor[(768, 3072), float16] */, units=768, out_dtype="float16") /* ty=Tensor[(7, 768), float16] */;
+  %364 = add(%363, meta[relay.Constant][69] /* ty=Tensor[(768), float16] */) /* ty=Tensor[(7, 768), float16] */;
+  %365 = reshape(%364, newshape=[1, 7, 768]) /* ty=Tensor[(1, 7, 768), float16] */;
+  %366 = nn.dropout(%365, rate=0.1f) /* ty=(Tensor[(1, 7, 768), float16], Tensor[(1, 7, 768), float16]) */;
+  %367 = %366.0 /* ty=Tensor[(1, 7, 768), float16] */;
+  %368 = cast(%367, dtype="float32") /* ty=Tensor[(1, 7, 768), float32] */;
+  %369 = add(%345, %368) /* ty=Tensor[(1, 7, 768), float32] */;
+  %370 = nn.layer_norm(%369, meta[relay.Constant][70] /* ty=Tensor[(768), float32] */, meta[relay.Constant][71] /* ty=Tensor[(768), float32] */) /* ty=Tensor[(1, 7, 768), float32] */;
+  %371 = reshape(%370, newshape=[-1, 768]) /* ty=Tensor[(7, 768), float32] */;
+  %372 = cast(%371, dtype="float16") /* ty=Tensor[(7, 768), float16] */;
+  %373 = nn.dense(%372, meta[relay.Constant][72] /* ty=Tensor[(2304, 768), float16] */, units=2304, out_dtype="float16") /* ty=Tensor[(7, 2304), float16] */;
+  %374 = add(%373, meta[relay.Constant][73] /* ty=Tensor[(2304), float16] */) /* ty=Tensor[(7, 2304), float16] */;
+  %375 = reshape(%374, newshape=[1, 7, 2304]) /* ty=Tensor[(1, 7, 2304), float16] */;
+  %376 = split(%375, indices_or_sections=[768, 1536], axis=2) /* ty=(Tensor[(1, 7, 768), float16], Tensor[(1, 7, 768), float16], Tensor[(1, 7, 768), float16]) */;
+  %377 = %376.0 /* ty=Tensor[(1, 7, 768), float16] */;
+  %378 = reshape(%377, newshape=[1, 7, 12, 64]) /* ty=Tensor[(1, 7, 12, 64), float16] */;
+  %379 = transpose(%378, axes=[0, 2, 1, 3]) /* ty=Tensor[(1, 12, 7, 64), float16] */;
+  %380 = broadcast_to(%379, shape=[1, 12, 7, 64], dtype="float16") /* ty=Tensor[(1, 12, 7, 64), float16] */;
+  %381 = %376.1 /* ty=Tensor[(1, 7, 768), float16] */;
+  %382 = reshape(%381, newshape=[1, 7, 12, 64]) /* ty=Tensor[(1, 7, 12, 64), float16] */;
+  %383 = transpose(%382, axes=[0, 2, 3, 1]) /* ty=Tensor[(1, 12, 64, 7), float16] */;
+  %384 = broadcast_to(%383, shape=[1, 12, 64, 7], dtype="float16") /* ty=Tensor[(1, 12, 64, 7), float16] */;
+  %385 = reshape(%380, newshape=[-1, 7, 64]) /* ty=Tensor[(12, 7, 64), float16] */;
+  %386 = reshape(%384, newshape=[-1, 64, 7]) /* ty=Tensor[(12, 64, 7), float16] */;
+  %387 = nn.batch_matmul(%385, %386, out_dtype="float16") /* ty=Tensor[(12, 7, 7), float16] */;
+  %388 = reshape(%387, newshape=[1, 12, 7, 7]) /* ty=Tensor[(1, 12, 7, 7), float16] */;
+  %389 = squeeze(%388, axis=[]) /* ty=Tensor[(1, 12, 7, 7), float16] */;
+  %390 = divide(%389, 8f16 /* ty=float16 */) /* ty=Tensor[(1, 12, 7, 7), float16] */;
+  %391 = multiply(%390, meta[relay.Constant][74] /* ty=Tensor[(1, 1, 7, 7), float16] */) /* ty=Tensor[(1, 12, 7, 7), float16] */;
+  %392 = add(%391, meta[relay.Constant][75] /* ty=Tensor[(1, 1, 7, 7), float16] */) /* ty=Tensor[(1, 12, 7, 7), float16] */;
+  %393 = cast(%392, dtype="float32") /* ty=Tensor[(1, 12, 7, 7), float32] */;
+  %394 = nn.softmax(%393) /* ty=Tensor[(1, 12, 7, 7), float32] */;
+  %395 = nn.dropout(%394, rate=0.1f) /* ty=(Tensor[(1, 12, 7, 7), float32], Tensor[(1, 12, 7, 7), float32]) */;
+  %396 = %395.0 /* ty=Tensor[(1, 12, 7, 7), float32] */;
+  %397 = broadcast_to(%396, shape=[1, 12, 7, 7]) /* ty=Tensor[(1, 12, 7, 7), float32] */;
+  %398 = reshape(%397, newshape=[-1, 7, 7]) /* ty=Tensor[(12, 7, 7), float32] */;
+  %399 = %376.2 /* ty=Tensor[(1, 7, 768), float16] */;
+  %400 = reshape(%399, newshape=[1, 7, 12, 64]) /* ty=Tensor[(1, 7, 12, 64), float16] */;
+  %401 = transpose(%400, axes=[0, 2, 1, 3]) /* ty=Tensor[(1, 12, 7, 64), float16] */;
+  %402 = broadcast_to(%401, shape=[1, 12, 7, 64], dtype="float16") /* ty=Tensor[(1, 12, 7, 64), float16] */;
+  %403 = cast(%398, dtype="float16") /* ty=Tensor[(12, 7, 7), float16] */;
+  %404 = reshape(%402, newshape=[-1, 7, 64]) /* ty=Tensor[(12, 7, 64), float16] */;
+  %405 = nn.batch_matmul(%403, %404, out_dtype="float16") /* ty=Tensor[(12, 7, 64), float16] */;
+  %406 = reshape(%405, newshape=[1, 12, 7, 64]) /* ty=Tensor[(1, 12, 7, 64), float16] */;
+  %407 = squeeze(%406, axis=[]) /* ty=Tensor[(1, 12, 7, 64), float16] */;
+  %408 = transpose(%407, axes=[0, 2, 1, 3]) /* ty=Tensor[(1, 7, 12, 64), float16] */;
+  %409 = reshape(%408, newshape=[1, 7, 768]) /* ty=Tensor[(1, 7, 768), float16] */;
+  %410 = reshape(%409, newshape=[-1, 768]) /* ty=Tensor[(7, 768), float16] */;
+  %411 = nn.dense(%410, meta[relay.Constant][76] /* ty=Tensor[(768, 768), float16] */, units=768, out_dtype="float16") /* ty=Tensor[(7, 768), float16] */;
+  %412 = add(%411, meta[relay.Constant][77] /* ty=Tensor[(768), float16] */) /* ty=Tensor[(7, 768), float16] */;
+  %413 = reshape(%412, newshape=[1, 7, 768]) /* ty=Tensor[(1, 7, 768), float16] */;
+  %414 = nn.dropout(%413, rate=0.1f) /* ty=(Tensor[(1, 7, 768), float16], Tensor[(1, 7, 768), float16]) */;
+  %415 = %414.0 /* ty=Tensor[(1, 7, 768), float16] */;
+  %416 = cast(%415, dtype="float32") /* ty=Tensor[(1, 7, 768), float32] */;
+  %417 = add(%370, %416) /* ty=Tensor[(1, 7, 768), float32] */;
+  %418 = nn.layer_norm(%417, meta[relay.Constant][78] /* ty=Tensor[(768), float32] */, meta[relay.Constant][79] /* ty=Tensor[(768), float32] */) /* ty=Tensor[(1, 7, 768), float32] */;
+  %419 = reshape(%418, newshape=[-1, 768]) /* ty=Tensor[(7, 768), float32] */;
+  %420 = cast(%419, dtype="float16") /* ty=Tensor[(7, 768), float16] */;
+  %421 = nn.dense(%420, meta[relay.Constant][80] /* ty=Tensor[(3072, 768), float16] */, units=3072, out_dtype="float16") /* ty=Tensor[(7, 3072), float16] */;
+  %422 = add(%421, meta[relay.Constant][81] /* ty=Tensor[(3072), float16] */) /* ty=Tensor[(7, 3072), float16] */;
+  %423 = reshape(%422, newshape=[1, 7, 3072]) /* ty=Tensor[(1, 7, 3072), float16] */;
+  %424 = multiply(%423, 0.5f16 /* ty=float16 */) /* ty=Tensor[(1, 7, 3072), float16] */;
+  %425 = cast(%423, dtype="float32") /* ty=Tensor[(1, 7, 3072), float32] */;
+  %426 = power(%425, 3f /* ty=float32 */) /* ty=Tensor[(1, 7, 3072), float32] */;
+  %427 = multiply(%426, 0.044715f /* ty=float32 */) /* ty=Tensor[(1, 7, 3072), float32] */;
+  %428 = add(%425, %427) /* ty=Tensor[(1, 7, 3072), float32] */;
+  %429 = multiply(%428, 0.797885f /* ty=float32 */) /* ty=Tensor[(1, 7, 3072), float32] */;
+  %430 = tanh(%429) /* ty=Tensor[(1, 7, 3072), float32] */;
+  %431 = cast(%424, dtype="float32") /* ty=Tensor[(1, 7, 3072), float32] */;
+  %432 = add(%430, 1f /* ty=float32 */) /* ty=Tensor[(1, 7, 3072), float32] */;
+  %433 = multiply(%431, %432) /* ty=Tensor[(1, 7, 3072), float32] */;
+  %434 = reshape(%433, newshape=[-1, 3072]) /* ty=Tensor[(7, 3072), float32] */;
+  %435 = cast(%434, dtype="float16") /* ty=Tensor[(7, 3072), float16] */;
+  %436 = nn.dense(%435, meta[relay.Constant][82] /* ty=Tensor[(768, 3072), float16] */, units=768, out_dtype="float16") /* ty=Tensor[(7, 768), float16] */;
+  %437 = add(%436, meta[relay.Constant][83] /* ty=Tensor[(768), float16] */) /* ty=Tensor[(7, 768), float16] */;
+  %438 = reshape(%437, newshape=[1, 7, 768]) /* ty=Tensor[(1, 7, 768), float16] */;
+  %439 = nn.dropout(%438, rate=0.1f) /* ty=(Tensor[(1, 7, 768), float16], Tensor[(1, 7, 768), float16]) */;
+  %440 = %439.0 /* ty=Tensor[(1, 7, 768), float16] */;
+  %441 = cast(%440, dtype="float32") /* ty=Tensor[(1, 7, 768), float32] */;
+  %442 = add(%418, %441) /* ty=Tensor[(1, 7, 768), float32] */;
+  %443 = nn.layer_norm(%442, meta[relay.Constant][84] /* ty=Tensor[(768), float32] */, meta[relay.Constant][85] /* ty=Tensor[(768), float32] */) /* ty=Tensor[(1, 7, 768), float32] */;
+  %444 = reshape(%443, newshape=[-1, 768]) /* ty=Tensor[(7, 768), float32] */;
+  %445 = cast(%444, dtype="float16") /* ty=Tensor[(7, 768), float16] */;
+  %446 = nn.dense(%445, meta[relay.Constant][86] /* ty=Tensor[(2304, 768), float16] */, units=2304, out_dtype="float16") /* ty=Tensor[(7, 2304), float16] */;
+  %447 = add(%446, meta[relay.Constant][87] /* ty=Tensor[(2304), float16] */) /* ty=Tensor[(7, 2304), float16] */;
+  %448 = reshape(%447, newshape=[1, 7, 2304]) /* ty=Tensor[(1, 7, 2304), float16] */;
+  %449 = split(%448, indices_or_sections=[768, 1536], axis=2) /* ty=(Tensor[(1, 7, 768), float16], Tensor[(1, 7, 768), float16], Tensor[(1, 7, 768), float16]) */;
+  %450 = %449.0 /* ty=Tensor[(1, 7, 768), float16] */;
+  %451 = reshape(%450, newshape=[1, 7, 12, 64]) /* ty=Tensor[(1, 7, 12, 64), float16] */;
+  %452 = transpose(%451, axes=[0, 2, 1, 3]) /* ty=Tensor[(1, 12, 7, 64), float16] */;
+  %453 = broadcast_to(%452, shape=[1, 12, 7, 64], dtype="float16") /* ty=Tensor[(1, 12, 7, 64), float16] */;
+  %454 = %449.1 /* ty=Tensor[(1, 7, 768), float16] */;
+  %455 = reshape(%454, newshape=[1, 7, 12, 64]) /* ty=Tensor[(1, 7, 12, 64), float16] */;
+  %456 = transpose(%455, axes=[0, 2, 3, 1]) /* ty=Tensor[(1, 12, 64, 7), float16] */;
+  %457 = broadcast_to(%456, shape=[1, 12, 64, 7], dtype="float16") /* ty=Tensor[(1, 12, 64, 7), float16] */;
+  %458 = reshape(%453, newshape=[-1, 7, 64]) /* ty=Tensor[(12, 7, 64), float16] */;
+  %459 = reshape(%457, newshape=[-1, 64, 7]) /* ty=Tensor[(12, 64, 7), float16] */;
+  %460 = nn.batch_matmul(%458, %459, out_dtype="float16") /* ty=Tensor[(12, 7, 7), float16] */;
+  %461 = reshape(%460, newshape=[1, 12, 7, 7]) /* ty=Tensor[(1, 12, 7, 7), float16] */;
+  %462 = squeeze(%461, axis=[]) /* ty=Tensor[(1, 12, 7, 7), float16] */;
+  %463 = divide(%462, 8f16 /* ty=float16 */) /* ty=Tensor[(1, 12, 7, 7), float16] */;
+  %464 = multiply(%463, meta[relay.Constant][88] /* ty=Tensor[(1, 1, 7, 7), float16] */) /* ty=Tensor[(1, 12, 7, 7), float16] */;
+  %465 = add(%464, meta[relay.Constant][89] /* ty=Tensor[(1, 1, 7, 7), float16] */) /* ty=Tensor[(1, 12, 7, 7), float16] */;
+  %466 = cast(%465, dtype="float32") /* ty=Tensor[(1, 12, 7, 7), float32] */;
+  %467 = nn.softmax(%466) /* ty=Tensor[(1, 12, 7, 7), float32] */;
+  %468 = nn.dropout(%467, rate=0.1f) /* ty=(Tensor[(1, 12, 7, 7), float32], Tensor[(1, 12, 7, 7), float32]) */;
+  %469 = %468.0 /* ty=Tensor[(1, 12, 7, 7), float32] */;
+  %470 = broadcast_to(%469, shape=[1, 12, 7, 7]) /* ty=Tensor[(1, 12, 7, 7), float32] */;
+  %471 = reshape(%470, newshape=[-1, 7, 7]) /* ty=Tensor[(12, 7, 7), float32] */;
+  %472 = %449.2 /* ty=Tensor[(1, 7, 768), float16] */;
+  %473 = reshape(%472, newshape=[1, 7, 12, 64]) /* ty=Tensor[(1, 7, 12, 64), float16] */;
+  %474 = transpose(%473, axes=[0, 2, 1, 3]) /* ty=Tensor[(1, 12, 7, 64), float16] */;
+  %475 = broadcast_to(%474, shape=[1, 12, 7, 64], dtype="float16") /* ty=Tensor[(1, 12, 7, 64), float16] */;
+  %476 = cast(%471, dtype="float16") /* ty=Tensor[(12, 7, 7), float16] */;
+  %477 = reshape(%475, newshape=[-1, 7, 64]) /* ty=Tensor[(12, 7, 64), float16] */;
+  %478 = nn.batch_matmul(%476, %477, out_dtype="float16") /* ty=Tensor[(12, 7, 64), float16] */;
+  %479 = reshape(%478, newshape=[1, 12, 7, 64]) /* ty=Tensor[(1, 12, 7, 64), float16] */;
+  %480 = squeeze(%479, axis=[]) /* ty=Tensor[(1, 12, 7, 64), float16] */;
+  %481 = transpose(%480, axes=[0, 2, 1, 3]) /* ty=Tensor[(1, 7, 12, 64), float16] */;
+  %482 = reshape(%481, newshape=[1, 7, 768]) /* ty=Tensor[(1, 7, 768), float16] */;
+  %483 = reshape(%482, newshape=[-1, 768]) /* ty=Tensor[(7, 768), float16] */;
+  %484 = nn.dense(%483, meta[relay.Constant][90] /* ty=Tensor[(768, 768), float16] */, units=768, out_dtype="float16") /* ty=Tensor[(7, 768), float16] */;
+  %485 = add(%484, meta[relay.Constant][91] /* ty=Tensor[(768), float16] */) /* ty=Tensor[(7, 768), float16] */;
+  %486 = reshape(%485, newshape=[1, 7, 768]) /* ty=Tensor[(1, 7, 768), float16] */;
+  %487 = nn.dropout(%486, rate=0.1f) /* ty=(Tensor[(1, 7, 768), float16], Tensor[(1, 7, 768), float16]) */;
+  %488 = %487.0 /* ty=Tensor[(1, 7, 768), float16] */;
+  %489 = cast(%488, dtype="float32") /* ty=Tensor[(1, 7, 768), float32] */;
+  %490 = add(%443, %489) /* ty=Tensor[(1, 7, 768), float32] */;
+  %491 = nn.layer_norm(%490, meta[relay.Constant][92] /* ty=Tensor[(768), float32] */, meta[relay.Constant][93] /* ty=Tensor[(768), float32] */) /* ty=Tensor[(1, 7, 768), float32] */;
+  %492 = reshape(%491, newshape=[-1, 768]) /* ty=Tensor[(7, 768), float32] */;
+  %493 = cast(%492, dtype="float16") /* ty=Tensor[(7, 768), float16] */;
+  %494 = nn.dense(%493, meta[relay.Constant][94] /* ty=Tensor[(3072, 768), float16] */, units=3072, out_dtype="float16") /* ty=Tensor[(7, 3072), float16] */;
+  %495 = add(%494, meta[relay.Constant][95] /* ty=Tensor[(3072), float16] */) /* ty=Tensor[(7, 3072), float16] */;
+  %496 = reshape(%495, newshape=[1, 7, 3072]) /* ty=Tensor[(1, 7, 3072), float16] */;
+  %497 = multiply(%496, 0.5f16 /* ty=float16 */) /* ty=Tensor[(1, 7, 3072), float16] */;
+  %498 = cast(%496, dtype="float32") /* ty=Tensor[(1, 7, 3072), float32] */;
+  %499 = power(%498, 3f /* ty=float32 */) /* ty=Tensor[(1, 7, 3072), float32] */;
+  %500 = multiply(%499, 0.044715f /* ty=float32 */) /* ty=Tensor[(1, 7, 3072), float32] */;
+  %501 = add(%498, %500) /* ty=Tensor[(1, 7, 3072), float32] */;
+  %502 = multiply(%501, 0.797885f /* ty=float32 */) /* ty=Tensor[(1, 7, 3072), float32] */;
+  %503 = tanh(%502) /* ty=Tensor[(1, 7, 3072), float32] */;
+  %504 = cast(%497, dtype="float32") /* ty=Tensor[(1, 7, 3072), float32] */;
+  %505 = add(%503, 1f /* ty=float32 */) /* ty=Tensor[(1, 7, 3072), float32] */;
+  %506 = multiply(%504, %505) /* ty=Tensor[(1, 7, 3072), float32] */;
+  %507 = reshape(%506, newshape=[-1, 3072]) /* ty=Tensor[(7, 3072), float32] */;
+  %508 = cast(%507, dtype="float16") /* ty=Tensor[(7, 3072), float16] */;
+  %509 = nn.dense(%508, meta[relay.Constant][96] /* ty=Tensor[(768, 3072), float16] */, units=768, out_dtype="float16") /* ty=Tensor[(7, 768), float16] */;
+  %510 = add(%509, meta[relay.Constant][97] /* ty=Tensor[(768), float16] */) /* ty=Tensor[(7, 768), float16] */;
+  %511 = reshape(%510, newshape=[1, 7, 768]) /* ty=Tensor[(1, 7, 768), float16] */;
+  %512 = nn.dropout(%511, rate=0.1f) /* ty=(Tensor[(1, 7, 768), float16], Tensor[(1, 7, 768), float16]) */;
+  %513 = %512.0 /* ty=Tensor[(1, 7, 768), float16] */;
+  %514 = cast(%513, dtype="float32") /* ty=Tensor[(1, 7, 768), float32] */;
+  %515 = add(%491, %514) /* ty=Tensor[(1, 7, 768), float32] */;
+  %516 = nn.layer_norm(%515, meta[relay.Constant][98] /* ty=Tensor[(768), float32] */, meta[relay.Constant][99] /* ty=Tensor[(768), float32] */) /* ty=Tensor[(1, 7, 768), float32] */;
+  %517 = reshape(%516, newshape=[-1, 768]) /* ty=Tensor[(7, 768), float32] */;
+  %518 = cast(%517, dtype="float16") /* ty=Tensor[(7, 768), float16] */;
+  %519 = nn.dense(%518, meta[relay.Constant][100] /* ty=Tensor[(2304, 768), float16] */, units=2304, out_dtype="float16") /* ty=Tensor[(7, 2304), float16] */;
+  %520 = add(%519, meta[relay.Constant][101] /* ty=Tensor[(2304), float16] */) /* ty=Tensor[(7, 2304), float16] */;
+  %521 = reshape(%520, newshape=[1, 7, 2304]) /* ty=Tensor[(1, 7, 2304), float16] */;
+  %522 = split(%521, indices_or_sections=[768, 1536], axis=2) /* ty=(Tensor[(1, 7, 768), float16], Tensor[(1, 7, 768), float16], Tensor[(1, 7, 768), float16]) */;
+  %523 = %522.0 /* ty=Tensor[(1, 7, 768), float16] */;
+  %524 = reshape(%523, newshape=[1, 7, 12, 64]) /* ty=Tensor[(1, 7, 12, 64), float16] */;
+  %525 = transpose(%524, axes=[0, 2, 1, 3]) /* ty=Tensor[(1, 12, 7, 64), float16] */;
+  %526 = broadcast_to(%525, shape=[1, 12, 7, 64], dtype="float16") /* ty=Tensor[(1, 12, 7, 64), float16] */;
+  %527 = %522.1 /* ty=Tensor[(1, 7, 768), float16] */;
+  %528 = reshape(%527, newshape=[1, 7, 12, 64]) /* ty=Tensor[(1, 7, 12, 64), float16] */;
+  %529 = transpose(%528, axes=[0, 2, 3, 1]) /* ty=Tensor[(1, 12, 64, 7), float16] */;
+  %530 = broadcast_to(%529, shape=[1, 12, 64, 7], dtype="float16") /* ty=Tensor[(1, 12, 64, 7), float16] */;
+  %531 = reshape(%526, newshape=[-1, 7, 64]) /* ty=Tensor[(12, 7, 64), float16] */;
+  %532 = reshape(%530, newshape=[-1, 64, 7]) /* ty=Tensor[(12, 64, 7), float16] */;
+  %533 = nn.batch_matmul(%531, %532, out_dtype="float16") /* ty=Tensor[(12, 7, 7), float16] */;
+  %534 = reshape(%533, newshape=[1, 12, 7, 7]) /* ty=Tensor[(1, 12, 7, 7), float16] */;
+  %535 = squeeze(%534, axis=[]) /* ty=Tensor[(1, 12, 7, 7), float16] */;
+  %536 = divide(%535, 8f16 /* ty=float16 */) /* ty=Tensor[(1, 12, 7, 7), float16] */;
+  %537 = multiply(%536, meta[relay.Constant][102] /* ty=Tensor[(1, 1, 7, 7), float16] */) /* ty=Tensor[(1, 12, 7, 7), float16] */;
+  %538 = add(%537, meta[relay.Constant][103] /* ty=Tensor[(1, 1, 7, 7), float16] */) /* ty=Tensor[(1, 12, 7, 7), float16] */;
+  %539 = cast(%538, dtype="float32") /* ty=Tensor[(1, 12, 7, 7), float32] */;
+  %540 = nn.softmax(%539) /* ty=Tensor[(1, 12, 7, 7), float32] */;
+  %541 = nn.dropout(%540, rate=0.1f) /* ty=(Tensor[(1, 12, 7, 7), float32], Tensor[(1, 12, 7, 7), float32]) */;
+  %542 = %541.0 /* ty=Tensor[(1, 12, 7, 7), float32] */;
+  %543 = broadcast_to(%542, shape=[1, 12, 7, 7]) /* ty=Tensor[(1, 12, 7, 7), float32] */;
+  %544 = reshape(%543, newshape=[-1, 7, 7]) /* ty=Tensor[(12, 7, 7), float32] */;
+  %545 = %522.2 /* ty=Tensor[(1, 7, 768), float16] */;
+  %546 = reshape(%545, newshape=[1, 7, 12, 64]) /* ty=Tensor[(1, 7, 12, 64), float16] */;
+  %547 = transpose(%546, axes=[0, 2, 1, 3]) /* ty=Tensor[(1, 12, 7, 64), float16] */;
+  %548 = broadcast_to(%547, shape=[1, 12, 7, 64], dtype="float16") /* ty=Tensor[(1, 12, 7, 64), float16] */;
+  %549 = cast(%544, dtype="float16") /* ty=Tensor[(12, 7, 7), float16] */;
+  %550 = reshape(%548, newshape=[-1, 7, 64]) /* ty=Tensor[(12, 7, 64), float16] */;
+  %551 = nn.batch_matmul(%549, %550, out_dtype="float16") /* ty=Tensor[(12, 7, 64), float16] */;
+  %552 = reshape(%551, newshape=[1, 12, 7, 64]) /* ty=Tensor[(1, 12, 7, 64), float16] */;
+  %553 = squeeze(%552, axis=[]) /* ty=Tensor[(1, 12, 7, 64), float16] */;
+  %554 = transpose(%553, axes=[0, 2, 1, 3]) /* ty=Tensor[(1, 7, 12, 64), float16] */;
+  %555 = reshape(%554, newshape=[1, 7, 768]) /* ty=Tensor[(1, 7, 768), float16] */;
+  %556 = reshape(%555, newshape=[-1, 768]) /* ty=Tensor[(7, 768), float16] */;
+  %557 = nn.dense(%556, meta[relay.Constant][104] /* ty=Tensor[(768, 768), float16] */, units=768, out_dtype="float16") /* ty=Tensor[(7, 768), float16] */;
+  %558 = add(%557, meta[relay.Constant][105] /* ty=Tensor[(768), float16] */) /* ty=Tensor[(7, 768), float16] */;
+  %559 = reshape(%558, newshape=[1, 7, 768]) /* ty=Tensor[(1, 7, 768), float16] */;
+  %560 = nn.dropout(%559, rate=0.1f) /* ty=(Tensor[(1, 7, 768), float16], Tensor[(1, 7, 768), float16]) */;
+  %561 = %560.0 /* ty=Tensor[(1, 7, 768), float16] */;
+  %562 = cast(%561, dtype="float32") /* ty=Tensor[(1, 7, 768), float32] */;
+  %563 = add(%516, %562) /* ty=Tensor[(1, 7, 768), float32] */;
+  %564 = nn.layer_norm(%563, meta[relay.Constant][106] /* ty=Tensor[(768), float32] */, meta[relay.Constant][107] /* ty=Tensor[(768), float32] */) /* ty=Tensor[(1, 7, 768), float32] */;
+  %565 = reshape(%564, newshape=[-1, 768]) /* ty=Tensor[(7, 768), float32] */;
+  %566 = cast(%565, dtype="float16") /* ty=Tensor[(7, 768), float16] */;
+  %567 = nn.dense(%566, meta[relay.Constant][108] /* ty=Tensor[(3072, 768), float16] */, units=3072, out_dtype="float16") /* ty=Tensor[(7, 3072), float16] */;
+  %568 = add(%567, meta[relay.Constant][109] /* ty=Tensor[(3072), float16] */) /* ty=Tensor[(7, 3072), float16] */;
+  %569 = reshape(%568, newshape=[1, 7, 3072]) /* ty=Tensor[(1, 7, 3072), float16] */;
+  %570 = multiply(%569, 0.5f16 /* ty=float16 */) /* ty=Tensor[(1, 7, 3072), float16] */;
+  %571 = cast(%569, dtype="float32") /* ty=Tensor[(1, 7, 3072), float32] */;
+  %572 = power(%571, 3f /* ty=float32 */) /* ty=Tensor[(1, 7, 3072), float32] */;
+  %573 = multiply(%572, 0.044715f /* ty=float32 */) /* ty=Tensor[(1, 7, 3072), float32] */;
+  %574 = add(%571, %573) /* ty=Tensor[(1, 7, 3072), float32] */;
+  %575 = multiply(%574, 0.797885f /* ty=float32 */) /* ty=Tensor[(1, 7, 3072), float32] */;
+  %576 = tanh(%575) /* ty=Tensor[(1, 7, 3072), float32] */;
+  %577 = cast(%570, dtype="float32") /* ty=Tensor[(1, 7, 3072), float32] */;
+  %578 = add(%576, 1f /* ty=float32 */) /* ty=Tensor[(1, 7, 3072), float32] */;
+  %579 = multiply(%577, %578) /* ty=Tensor[(1, 7, 3072), float32] */;
+  %580 = reshape(%579, newshape=[-1, 3072]) /* ty=Tensor[(7, 3072), float32] */;
+  %581 = cast(%580, dtype="float16") /* ty=Tensor[(7, 3072), float16] */;
+  %582 = nn.dense(%581, meta[relay.Constant][110] /* ty=Tensor[(768, 3072), float16] */, units=768, out_dtype="float16") /* ty=Tensor[(7, 768), float16] */;
+  %583 = add(%582, meta[relay.Constant][111] /* ty=Tensor[(768), float16] */) /* ty=Tensor[(7, 768), float16] */;
+  %584 = reshape(%583, newshape=[1, 7, 768]) /* ty=Tensor[(1, 7, 768), float16] */;
+  %585 = nn.dropout(%584, rate=0.1f) /* ty=(Tensor[(1, 7, 768), float16], Tensor[(1, 7, 768), float16]) */;
+  %586 = %585.0 /* ty=Tensor[(1, 7, 768), float16] */;
+  %587 = cast(%586, dtype="float32") /* ty=Tensor[(1, 7, 768), float32] */;
+  %588 = add(%564, %587) /* ty=Tensor[(1, 7, 768), float32] */;
+  %589 = nn.layer_norm(%588, meta[relay.Constant][112] /* ty=Tensor[(768), float32] */, meta[relay.Constant][113] /* ty=Tensor[(768), float32] */) /* ty=Tensor[(1, 7, 768), float32] */;
+  %590 = reshape(%589, newshape=[-1, 768]) /* ty=Tensor[(7, 768), float32] */;
+  %591 = cast(%590, dtype="float16") /* ty=Tensor[(7, 768), float16] */;
+  %592 = nn.dense(%591, meta[relay.Constant][114] /* ty=Tensor[(2304, 768), float16] */, units=2304, out_dtype="float16") /* ty=Tensor[(7, 2304), float16] */;
+  %593 = add(%592, meta[relay.Constant][115] /* ty=Tensor[(2304), float16] */) /* ty=Tensor[(7, 2304), float16] */;
+  %594 = reshape(%593, newshape=[1, 7, 2304]) /* ty=Tensor[(1, 7, 2304), float16] */;
+  %595 = split(%594, indices_or_sections=[768, 1536], axis=2) /* ty=(Tensor[(1, 7, 768), float16], Tensor[(1, 7, 768), float16], Tensor[(1, 7, 768), float16]) */;
+  %596 = %595.0 /* ty=Tensor[(1, 7, 768), float16] */;
+  %597 = reshape(%596, newshape=[1, 7, 12, 64]) /* ty=Tensor[(1, 7, 12, 64), float16] */;
+  %598 = transpose(%597, axes=[0, 2, 1, 3]) /* ty=Tensor[(1, 12, 7, 64), float16] */;
+  %599 = broadcast_to(%598, shape=[1, 12, 7, 64], dtype="float16") /* ty=Tensor[(1, 12, 7, 64), float16] */;
+  %600 = %595.1 /* ty=Tensor[(1, 7, 768), float16] */;
+  %601 = reshape(%600, newshape=[1, 7, 12, 64]) /* ty=Tensor[(1, 7, 12, 64), float16] */;
+  %602 = transpose(%601, axes=[0, 2, 3, 1]) /* ty=Tensor[(1, 12, 64, 7), float16] */;
+  %603 = broadcast_to(%602, shape=[1, 12, 64, 7], dtype="float16") /* ty=Tensor[(1, 12, 64, 7), float16] */;
+  %604 = reshape(%599, newshape=[-1, 7, 64]) /* ty=Tensor[(12, 7, 64), float16] */;
+  %605 = reshape(%603, newshape=[-1, 64, 7]) /* ty=Tensor[(12, 64, 7), float16] */;
+  %606 = nn.batch_matmul(%604, %605, out_dtype="float16") /* ty=Tensor[(12, 7, 7), float16] */;
+  %607 = reshape(%606, newshape=[1, 12, 7, 7]) /* ty=Tensor[(1, 12, 7, 7), float16] */;
+  %608 = squeeze(%607, axis=[]) /* ty=Tensor[(1, 12, 7, 7), float16] */;
+  %609 = divide(%608, 8f16 /* ty=float16 */) /* ty=Tensor[(1, 12, 7, 7), float16] */;
+  %610 = multiply(%609, meta[relay.Constant][116] /* ty=Tensor[(1, 1, 7, 7), float16] */) /* ty=Tensor[(1, 12, 7, 7), float16] */;
+  %611 = add(%610, meta[relay.Constant][117] /* ty=Tensor[(1, 1, 7, 7), float16] */) /* ty=Tensor[(1, 12, 7, 7), float16] */;
+  %612 = cast(%611, dtype="float32") /* ty=Tensor[(1, 12, 7, 7), float32] */;
+  %613 = nn.softmax(%612) /* ty=Tensor[(1, 12, 7, 7), float32] */;
+  %614 = nn.dropout(%613, rate=0.1f) /* ty=(Tensor[(1, 12, 7, 7), float32], Tensor[(1, 12, 7, 7), float32]) */;
+  %615 = %614.0 /* ty=Tensor[(1, 12, 7, 7), float32] */;
+  %616 = broadcast_to(%615, shape=[1, 12, 7, 7]) /* ty=Tensor[(1, 12, 7, 7), float32] */;
+  %617 = reshape(%616, newshape=[-1, 7, 7]) /* ty=Tensor[(12, 7, 7), float32] */;
+  %618 = %595.2 /* ty=Tensor[(1, 7, 768), float16] */;
+  %619 = reshape(%618, newshape=[1, 7, 12, 64]) /* ty=Tensor[(1, 7, 12, 64), float16] */;
+  %620 = transpose(%619, axes=[0, 2, 1, 3]) /* ty=Tensor[(1, 12, 7, 64), float16] */;
+  %621 = broadcast_to(%620, shape=[1, 12, 7, 64], dtype="float16") /* ty=Tensor[(1, 12, 7, 64), float16] */;
+  %622 = cast(%617, dtype="float16") /* ty=Tensor[(12, 7, 7), float16] */;
+  %623 = reshape(%621, newshape=[-1, 7, 64]) /* ty=Tensor[(12, 7, 64), float16] */;
+  %624 = nn.batch_matmul(%622, %623, out_dtype="float16") /* ty=Tensor[(12, 7, 64), float16] */;
+  %625 = reshape(%624, newshape=[1, 12, 7, 64]) /* ty=Tensor[(1, 12, 7, 64), float16] */;
+  %626 = squeeze(%625, axis=[]) /* ty=Tensor[(1, 12, 7, 64), float16] */;
+  %627 = transpose(%626, axes=[0, 2, 1, 3]) /* ty=Tensor[(1, 7, 12, 64), float16] */;
+  %628 = reshape(%627, newshape=[1, 7, 768]) /* ty=Tensor[(1, 7, 768), float16] */;
+  %629 = reshape(%628, newshape=[-1, 768]) /* ty=Tensor[(7, 768), float16] */;
+  %630 = nn.dense(%629, meta[relay.Constant][118] /* ty=Tensor[(768, 768), float16] */, units=768, out_dtype="float16") /* ty=Tensor[(7, 768), float16] */;
+  %631 = add(%630, meta[relay.Constant][119] /* ty=Tensor[(768), float16] */) /* ty=Tensor[(7, 768), float16] */;
+  %632 = reshape(%631, newshape=[1, 7, 768]) /* ty=Tensor[(1, 7, 768), float16] */;
+  %633 = nn.dropout(%632, rate=0.1f) /* ty=(Tensor[(1, 7, 768), float16], Tensor[(1, 7, 768), float16]) */;
+  %634 = %633.0 /* ty=Tensor[(1, 7, 768), float16] */;
+  %635 = cast(%634, dtype="float32") /* ty=Tensor[(1, 7, 768), float32] */;
+  %636 = add(%589, %635) /* ty=Tensor[(1, 7, 768), float32] */;
+  %637 = nn.layer_norm(%636, meta[relay.Constant][120] /* ty=Tensor[(768), float32] */, meta[relay.Constant][121] /* ty=Tensor[(768), float32] */) /* ty=Tensor[(1, 7, 768), float32] */;
+  %638 = reshape(%637, newshape=[-1, 768]) /* ty=Tensor[(7, 768), float32] */;
+  %639 = cast(%638, dtype="float16") /* ty=Tensor[(7, 768), float16] */;
+  %640 = nn.dense(%639, meta[relay.Constant][122] /* ty=Tensor[(3072, 768), float16] */, units=3072, out_dtype="float16") /* ty=Tensor[(7, 3072), float16] */;
+  %641 = add(%640, meta[relay.Constant][123] /* ty=Tensor[(3072), float16] */) /* ty=Tensor[(7, 3072), float16] */;
+  %642 = reshape(%641, newshape=[1, 7, 3072]) /* ty=Tensor[(1, 7, 3072), float16] */;
+  %643 = multiply(%642, 0.5f16 /* ty=float16 */) /* ty=Tensor[(1, 7, 3072), float16] */;
+  %644 = cast(%642, dtype="float32") /* ty=Tensor[(1, 7, 3072), float32] */;
+  %645 = power(%644, 3f /* ty=float32 */) /* ty=Tensor[(1, 7, 3072), float32] */;
+  %646 = multiply(%645, 0.044715f /* ty=float32 */) /* ty=Tensor[(1, 7, 3072), float32] */;
+  %647 = add(%644, %646) /* ty=Tensor[(1, 7, 3072), float32] */;
+  %648 = multiply(%647, 0.797885f /* ty=float32 */) /* ty=Tensor[(1, 7, 3072), float32] */;
+  %649 = tanh(%648) /* ty=Tensor[(1, 7, 3072), float32] */;
+  %650 = cast(%643, dtype="float32") /* ty=Tensor[(1, 7, 3072), float32] */;
+  %651 = add(%649, 1f /* ty=float32 */) /* ty=Tensor[(1, 7, 3072), float32] */;
+  %652 = multiply(%650, %651) /* ty=Tensor[(1, 7, 3072), float32] */;
+  %653 = reshape(%652, newshape=[-1, 3072]) /* ty=Tensor[(7, 3072), float32] */;
+  %654 = cast(%653, dtype="float16") /* ty=Tensor[(7, 3072), float16] */;
+  %655 = nn.dense(%654, meta[relay.Constant][124] /* ty=Tensor[(768, 3072), float16] */, units=768, out_dtype="float16") /* ty=Tensor[(7, 768), float16] */;
+  %656 = add(%655, meta[relay.Constant][125] /* ty=Tensor[(768), float16] */) /* ty=Tensor[(7, 768), float16] */;
+  %657 = reshape(%656, newshape=[1, 7, 768]) /* ty=Tensor[(1, 7, 768), float16] */;
+  %658 = nn.dropout(%657, rate=0.1f) /* ty=(Tensor[(1, 7, 768), float16], Tensor[(1, 7, 768), float16]) */;
+  %659 = %658.0 /* ty=Tensor[(1, 7, 768), float16] */;
+  %660 = cast(%659, dtype="float32") /* ty=Tensor[(1, 7, 768), float32] */;
+  %661 = add(%637, %660) /* ty=Tensor[(1, 7, 768), float32] */;
+  %662 = nn.layer_norm(%661, meta[relay.Constant][126] /* ty=Tensor[(768), float32] */, meta[relay.Constant][127] /* ty=Tensor[(768), float32] */) /* ty=Tensor[(1, 7, 768), float32] */;
+  %663 = reshape(%662, newshape=[-1, 768]) /* ty=Tensor[(7, 768), float32] */;
+  %664 = cast(%663, dtype="float16") /* ty=Tensor[(7, 768), float16] */;
+  %665 = nn.dense(%664, meta[relay.Constant][128] /* ty=Tensor[(2304, 768), float16] */, units=2304, out_dtype="float16") /* ty=Tensor[(7, 2304), float16] */;
+  %666 = add(%665, meta[relay.Constant][129] /* ty=Tensor[(2304), float16] */) /* ty=Tensor[(7, 2304), float16] */;
+  %667 = reshape(%666, newshape=[1, 7, 2304]) /* ty=Tensor[(1, 7, 2304), float16] */;
+  %668 = split(%667, indices_or_sections=[768, 1536], axis=2) /* ty=(Tensor[(1, 7, 768), float16], Tensor[(1, 7, 768), float16], Tensor[(1, 7, 768), float16]) */;
+  %669 = %668.0 /* ty=Tensor[(1, 7, 768), float16] */;
+  %670 = reshape(%669, newshape=[1, 7, 12, 64]) /* ty=Tensor[(1, 7, 12, 64), float16] */;
+  %671 = transpose(%670, axes=[0, 2, 1, 3]) /* ty=Tensor[(1, 12, 7, 64), float16] */;
+  %672 = broadcast_to(%671, shape=[1, 12, 7, 64], dtype="float16") /* ty=Tensor[(1, 12, 7, 64), float16] */;
+  %673 = %668.1 /* ty=Tensor[(1, 7, 768), float16] */;
+  %674 = reshape(%673, newshape=[1, 7, 12, 64]) /* ty=Tensor[(1, 7, 12, 64), float16] */;
+  %675 = transpose(%674, axes=[0, 2, 3, 1]) /* ty=Tensor[(1, 12, 64, 7), float16] */;
+  %676 = broadcast_to(%675, shape=[1, 12, 64, 7], dtype="float16") /* ty=Tensor[(1, 12, 64, 7), float16] */;
+  %677 = reshape(%672, newshape=[-1, 7, 64]) /* ty=Tensor[(12, 7, 64), float16] */;
+  %678 = reshape(%676, newshape=[-1, 64, 7]) /* ty=Tensor[(12, 64, 7), float16] */;
+  %679 = nn.batch_matmul(%677, %678, out_dtype="float16") /* ty=Tensor[(12, 7, 7), float16] */;
+  %680 = reshape(%679, newshape=[1, 12, 7, 7]) /* ty=Tensor[(1, 12, 7, 7), float16] */;
+  %681 = squeeze(%680, axis=[]) /* ty=Tensor[(1, 12, 7, 7), float16] */;
+  %682 = divide(%681, 8f16 /* ty=float16 */) /* ty=Tensor[(1, 12, 7, 7), float16] */;
+  %683 = multiply(%682, meta[relay.Constant][130] /* ty=Tensor[(1, 1, 7, 7), float16] */) /* ty=Tensor[(1, 12, 7, 7), float16] */;
+  %684 = add(%683, meta[relay.Constant][131] /* ty=Tensor[(1, 1, 7, 7), float16] */) /* ty=Tensor[(1, 12, 7, 7), float16] */;
+  %685 = cast(%684, dtype="float32") /* ty=Tensor[(1, 12, 7, 7), float32] */;
+  %686 = nn.softmax(%685) /* ty=Tensor[(1, 12, 7, 7), float32] */;
+  %687 = nn.dropout(%686, rate=0.1f) /* ty=(Tensor[(1, 12, 7, 7), float32], Tensor[(1, 12, 7, 7), float32]) */;
+  %688 = %687.0 /* ty=Tensor[(1, 12, 7, 7), float32] */;
+  %689 = broadcast_to(%688, shape=[1, 12, 7, 7]) /* ty=Tensor[(1, 12, 7, 7), float32] */;
+  %690 = reshape(%689, newshape=[-1, 7, 7]) /* ty=Tensor[(12, 7, 7), float32] */;
+  %691 = %668.2 /* ty=Tensor[(1, 7, 768), float16] */;
+  %692 = reshape(%691, newshape=[1, 7, 12, 64]) /* ty=Tensor[(1, 7, 12, 64), float16] */;
+  %693 = transpose(%692, axes=[0, 2, 1, 3]) /* ty=Tensor[(1, 12, 7, 64), float16] */;
+  %694 = broadcast_to(%693, shape=[1, 12, 7, 64], dtype="float16") /* ty=Tensor[(1, 12, 7, 64), float16] */;
+  %695 = cast(%690, dtype="float16") /* ty=Tensor[(12, 7, 7), float16] */;
+  %696 = reshape(%694, newshape=[-1, 7, 64]) /* ty=Tensor[(12, 7, 64), float16] */;
+  %697 = nn.batch_matmul(%695, %696, out_dtype="float16") /* ty=Tensor[(12, 7, 64), float16] */;
+  %698 = reshape(%697, newshape=[1, 12, 7, 64]) /* ty=Tensor[(1, 12, 7, 64), float16] */;
+  %699 = squeeze(%698, axis=[]) /* ty=Tensor[(1, 12, 7, 64), float16] */;
+  %700 = transpose(%699, axes=[0, 2, 1, 3]) /* ty=Tensor[(1, 7, 12, 64), float16] */;
+  %701 = reshape(%700, newshape=[1, 7, 768]) /* ty=Tensor[(1, 7, 768), float16] */;
+  %702 = reshape(%701, newshape=[-1, 768]) /* ty=Tensor[(7, 768), float16] */;
+  %703 = nn.dense(%702, meta[relay.Constant][132] /* ty=Tensor[(768, 768), float16] */, units=768, out_dtype="float16") /* ty=Tensor[(7, 768), float16] */;
+  %704 = add(%703, meta[relay.Constant][133] /* ty=Tensor[(768), float16] */) /* ty=Tensor[(7, 768), float16] */;
+  %705 = reshape(%704, newshape=[1, 7, 768]) /* ty=Tensor[(1, 7, 768), float16] */;
+  %706 = nn.dropout(%705, rate=0.1f) /* ty=(Tensor[(1, 7, 768), float16], Tensor[(1, 7, 768), float16]) */;
+  %707 = %706.0 /* ty=Tensor[(1, 7, 768), float16] */;
+  %708 = cast(%707, dtype="float32") /* ty=Tensor[(1, 7, 768), float32] */;
+  %709 = add(%662, %708) /* ty=Tensor[(1, 7, 768), float32] */;
+  %710 = nn.layer_norm(%709, meta[relay.Constant][134] /* ty=Tensor[(768), float32] */, meta[relay.Constant][135] /* ty=Tensor[(768), float32] */) /* ty=Tensor[(1, 7, 768), float32] */;
+  %711 = reshape(%710, newshape=[-1, 768]) /* ty=Tensor[(7, 768), float32] */;
+  %712 = cast(%711, dtype="float16") /* ty=Tensor[(7, 768), float16] */;
+  %713 = nn.dense(%712, meta[relay.Constant][136] /* ty=Tensor[(3072, 768), float16] */, units=3072, out_dtype="float16") /* ty=Tensor[(7, 3072), float16] */;
+  %714 = add(%713, meta[relay.Constant][137] /* ty=Tensor[(3072), float16] */) /* ty=Tensor[(7, 3072), float16] */;
+  %715 = reshape(%714, newshape=[1, 7, 3072]) /* ty=Tensor[(1, 7, 3072), float16] */;
+  %716 = multiply(%715, 0.5f16 /* ty=float16 */) /* ty=Tensor[(1, 7, 3072), float16] */;
+  %717 = cast(%715, dtype="float32") /* ty=Tensor[(1, 7, 3072), float32] */;
+  %718 = power(%717, 3f /* ty=float32 */) /* ty=Tensor[(1, 7, 3072), float32] */;
+  %719 = multiply(%718, 0.044715f /* ty=float32 */) /* ty=Tensor[(1, 7, 3072), float32] */;
+  %720 = add(%717, %719) /* ty=Tensor[(1, 7, 3072), float32] */;
+  %721 = multiply(%720, 0.797885f /* ty=float32 */) /* ty=Tensor[(1, 7, 3072), float32] */;
+  %722 = tanh(%721) /* ty=Tensor[(1, 7, 3072), float32] */;
+  %723 = cast(%716, dtype="float32") /* ty=Tensor[(1, 7, 3072), float32] */;
+  %724 = add(%722, 1f /* ty=float32 */) /* ty=Tensor[(1, 7, 3072), float32] */;
+  %725 = multiply(%723, %724) /* ty=Tensor[(1, 7, 3072), float32] */;
+  %726 = reshape(%725, newshape=[-1, 3072]) /* ty=Tensor[(7, 3072), float32] */;
+  %727 = cast(%726, dtype="float16") /* ty=Tensor[(7, 3072), float16] */;
+  %728 = nn.dense(%727, meta[relay.Constant][138] /* ty=Tensor[(768, 3072), float16] */, units=768, out_dtype="float16") /* ty=Tensor[(7, 768), float16] */;
+  %729 = add(%728, meta[relay.Constant][139] /* ty=Tensor[(768), float16] */) /* ty=Tensor[(7, 768), float16] */;
+  %730 = reshape(%729, newshape=[1, 7, 768]) /* ty=Tensor[(1, 7, 768), float16] */;
+  %731 = nn.dropout(%730, rate=0.1f) /* ty=(Tensor[(1, 7, 768), float16], Tensor[(1, 7, 768), float16]) */;
+  %732 = %731.0 /* ty=Tensor[(1, 7, 768), float16] */;
+  %733 = cast(%732, dtype="float32") /* ty=Tensor[(1, 7, 768), float32] */;
+  %734 = add(%710, %733) /* ty=Tensor[(1, 7, 768), float32] */;
+  %735 = nn.layer_norm(%734, meta[relay.Constant][140] /* ty=Tensor[(768), float32] */, meta[relay.Constant][141] /* ty=Tensor[(768), float32] */) /* ty=Tensor[(1, 7, 768), float32] */;
+  %736 = reshape(%735, newshape=[-1, 768]) /* ty=Tensor[(7, 768), float32] */;
+  %737 = cast(%736, dtype="float16") /* ty=Tensor[(7, 768), float16] */;
+  %738 = nn.dense(%737, meta[relay.Constant][142] /* ty=Tensor[(2304, 768), float16] */, units=2304, out_dtype="float16") /* ty=Tensor[(7, 2304), float16] */;
+  %739 = add(%738, meta[relay.Constant][143] /* ty=Tensor[(2304), float16] */) /* ty=Tensor[(7, 2304), float16] */;
+  %740 = reshape(%739, newshape=[1, 7, 2304]) /* ty=Tensor[(1, 7, 2304), float16] */;
+  %741 = split(%740, indices_or_sections=[768, 1536], axis=2) /* ty=(Tensor[(1, 7, 768), float16], Tensor[(1, 7, 768), float16], Tensor[(1, 7, 768), float16]) */;
+  %742 = %741.0 /* ty=Tensor[(1, 7, 768), float16] */;
+  %743 = reshape(%742, newshape=[1, 7, 12, 64]) /* ty=Tensor[(1, 7, 12, 64), float16] */;
+  %744 = transpose(%743, axes=[0, 2, 1, 3]) /* ty=Tensor[(1, 12, 7, 64), float16] */;
+  %745 = broadcast_to(%744, shape=[1, 12, 7, 64], dtype="float16") /* ty=Tensor[(1, 12, 7, 64), float16] */;
+  %746 = %741.1 /* ty=Tensor[(1, 7, 768), float16] */;
+  %747 = reshape(%746, newshape=[1, 7, 12, 64]) /* ty=Tensor[(1, 7, 12, 64), float16] */;
+  %748 = transpose(%747, axes=[0, 2, 3, 1]) /* ty=Tensor[(1, 12, 64, 7), float16] */;
+  %749 = broadcast_to(%748, shape=[1, 12, 64, 7], dtype="float16") /* ty=Tensor[(1, 12, 64, 7), float16] */;
+  %750 = reshape(%745, newshape=[-1, 7, 64]) /* ty=Tensor[(12, 7, 64), float16] */;
+  %751 = reshape(%749, newshape=[-1, 64, 7]) /* ty=Tensor[(12, 64, 7), float16] */;
+  %752 = nn.batch_matmul(%750, %751, out_dtype="float16") /* ty=Tensor[(12, 7, 7), float16] */;
+  %753 = reshape(%752, newshape=[1, 12, 7, 7]) /* ty=Tensor[(1, 12, 7, 7), float16] */;
+  %754 = squeeze(%753, axis=[]) /* ty=Tensor[(1, 12, 7, 7), float16] */;
+  %755 = divide(%754, 8f16 /* ty=float16 */) /* ty=Tensor[(1, 12, 7, 7), float16] */;
+  %756 = multiply(%755, meta[relay.Constant][144] /* ty=Tensor[(1, 1, 7, 7), float16] */) /* ty=Tensor[(1, 12, 7, 7), float16] */;
+  %757 = add(%756, meta[relay.Constant][145] /* ty=Tensor[(1, 1, 7, 7), float16] */) /* ty=Tensor[(1, 12, 7, 7), float16] */;
+  %758 = cast(%757, dtype="float32") /* ty=Tensor[(1, 12, 7, 7), float32] */;
+  %759 = nn.softmax(%758) /* ty=Tensor[(1, 12, 7, 7), float32] */;
+  %760 = nn.dropout(%759, rate=0.1f) /* ty=(Tensor[(1, 12, 7, 7), float32], Tensor[(1, 12, 7, 7), float32]) */;
+  %761 = %760.0 /* ty=Tensor[(1, 12, 7, 7), float32] */;
+  %762 = broadcast_to(%761, shape=[1, 12, 7, 7]) /* ty=Tensor[(1, 12, 7, 7), float32] */;
+  %763 = reshape(%762, newshape=[-1, 7, 7]) /* ty=Tensor[(12, 7, 7), float32] */;
+  %764 = %741.2 /* ty=Tensor[(1, 7, 768), float16] */;
+  %765 = reshape(%764, newshape=[1, 7, 12, 64]) /* ty=Tensor[(1, 7, 12, 64), float16] */;
+  %766 = transpose(%765, axes=[0, 2, 1, 3]) /* ty=Tensor[(1, 12, 7, 64), float16] */;
+  %767 = broadcast_to(%766, shape=[1, 12, 7, 64], dtype="float16") /* ty=Tensor[(1, 12, 7, 64), float16] */;
+  %768 = cast(%763, dtype="float16") /* ty=Tensor[(12, 7, 7), float16] */;
+  %769 = reshape(%767, newshape=[-1, 7, 64]) /* ty=Tensor[(12, 7, 64), float16] */;
+  %770 = nn.batch_matmul(%768, %769, out_dtype="float16") /* ty=Tensor[(12, 7, 64), float16] */;
+  %771 = reshape(%770, newshape=[1, 12, 7, 64]) /* ty=Tensor[(1, 12, 7, 64), float16] */;
+  %772 = squeeze(%771, axis=[]) /* ty=Tensor[(1, 12, 7, 64), float16] */;
+  %773 = transpose(%772, axes=[0, 2, 1, 3]) /* ty=Tensor[(1, 7, 12, 64), float16] */;
+  %774 = reshape(%773, newshape=[1, 7, 768]) /* ty=Tensor[(1, 7, 768), float16] */;
+  %775 = reshape(%774, newshape=[-1, 768]) /* ty=Tensor[(7, 768), float16] */;
+  %776 = nn.dense(%775, meta[relay.Constant][146] /* ty=Tensor[(768, 768), float16] */, units=768, out_dtype="float16") /* ty=Tensor[(7, 768), float16] */;
+  %777 = add(%776, meta[relay.Constant][147] /* ty=Tensor[(768), float16] */) /* ty=Tensor[(7, 768), float16] */;
+  %778 = reshape(%777, newshape=[1, 7, 768]) /* ty=Tensor[(1, 7, 768), float16] */;
+  %779 = nn.dropout(%778, rate=0.1f) /* ty=(Tensor[(1, 7, 768), float16], Tensor[(1, 7, 768), float16]) */;
+  %780 = %779.0 /* ty=Tensor[(1, 7, 768), float16] */;
+  %781 = cast(%780, dtype="float32") /* ty=Tensor[(1, 7, 768), float32] */;
+  %782 = add(%735, %781) /* ty=Tensor[(1, 7, 768), float32] */;
+  %783 = nn.layer_norm(%782, meta[relay.Constant][148] /* ty=Tensor[(768), float32] */, meta[relay.Constant][149] /* ty=Tensor[(768), float32] */) /* ty=Tensor[(1, 7, 768), float32] */;
+  %784 = reshape(%783, newshape=[-1, 768]) /* ty=Tensor[(7, 768), float32] */;
+  %785 = cast(%784, dtype="float16") /* ty=Tensor[(7, 768), float16] */;
+  %786 = nn.dense(%785, meta[relay.Constant][150] /* ty=Tensor[(3072, 768), float16] */, units=3072, out_dtype="float16") /* ty=Tensor[(7, 3072), float16] */;
+  %787 = add(%786, meta[relay.Constant][151] /* ty=Tensor[(3072), float16] */) /* ty=Tensor[(7, 3072), float16] */;
+  %788 = reshape(%787, newshape=[1, 7, 3072]) /* ty=Tensor[(1, 7, 3072), float16] */;
+  %789 = multiply(%788, 0.5f16 /* ty=float16 */) /* ty=Tensor[(1, 7, 3072), float16] */;
+  %790 = cast(%788, dtype="float32") /* ty=Tensor[(1, 7, 3072), float32] */;
+  %791 = power(%790, 3f /* ty=float32 */) /* ty=Tensor[(1, 7, 3072), float32] */;
+  %792 = multiply(%791, 0.044715f /* ty=float32 */) /* ty=Tensor[(1, 7, 3072), float32] */;
+  %793 = add(%790, %792) /* ty=Tensor[(1, 7, 3072), float32] */;
+  %794 = multiply(%793, 0.797885f /* ty=float32 */) /* ty=Tensor[(1, 7, 3072), float32] */;
+  %795 = tanh(%794) /* ty=Tensor[(1, 7, 3072), float32] */;
+  %796 = cast(%789, dtype="float32") /* ty=Tensor[(1, 7, 3072), float32] */;
+  %797 = add(%795, 1f /* ty=float32 */) /* ty=Tensor[(1, 7, 3072), float32] */;
+  %798 = multiply(%796, %797) /* ty=Tensor[(1, 7, 3072), float32] */;
+  %799 = reshape(%798, newshape=[-1, 3072]) /* ty=Tensor[(7, 3072), float32] */;
+  %800 = cast(%799, dtype="float16") /* ty=Tensor[(7, 3072), float16] */;
+  %801 = nn.dense(%800, meta[relay.Constant][152] /* ty=Tensor[(768, 3072), float16] */, units=768, out_dtype="float16") /* ty=Tensor[(7, 768), float16] */;
+  %802 = add(%801, meta[relay.Constant][153] /* ty=Tensor[(768), float16] */) /* ty=Tensor[(7, 768), float16] */;
+  %803 = reshape(%802, newshape=[1, 7, 768]) /* ty=Tensor[(1, 7, 768), float16] */;
+  %804 = nn.dropout(%803, rate=0.1f) /* ty=(Tensor[(1, 7, 768), float16], Tensor[(1, 7, 768), float16]) */;
+  %805 = %804.0 /* ty=Tensor[(1, 7, 768), float16] */;
+  %806 = cast(%805, dtype="float32") /* ty=Tensor[(1, 7, 768), float32] */;
+  %807 = add(%783, %806) /* ty=Tensor[(1, 7, 768), float32] */;
+  %808 = nn.layer_norm(%807, meta[relay.Constant][154] /* ty=Tensor[(768), float32] */, meta[relay.Constant][155] /* ty=Tensor[(768), float32] */) /* ty=Tensor[(1, 7, 768), float32] */;
+  %809 = reshape(%808, newshape=[-1, 768]) /* ty=Tensor[(7, 768), float32] */;
+  %810 = cast(%809, dtype="float16") /* ty=Tensor[(7, 768), float16] */;
+  %811 = nn.dense(%810, meta[relay.Constant][156] /* ty=Tensor[(2304, 768), float16] */, units=2304, out_dtype="float16") /* ty=Tensor[(7, 2304), float16] */;
+  %812 = add(%811, meta[relay.Constant][157] /* ty=Tensor[(2304), float16] */) /* ty=Tensor[(7, 2304), float16] */;
+  %813 = reshape(%812, newshape=[1, 7, 2304]) /* ty=Tensor[(1, 7, 2304), float16] */;
+  %814 = split(%813, indices_or_sections=[768, 1536], axis=2) /* ty=(Tensor[(1, 7, 768), float16], Tensor[(1, 7, 768), float16], Tensor[(1, 7, 768), float16]) */;
+  %815 = %814.0 /* ty=Tensor[(1, 7, 768), float16] */;
+  %816 = reshape(%815, newshape=[1, 7, 12, 64]) /* ty=Tensor[(1, 7, 12, 64), float16] */;
+  %817 = transpose(%816, axes=[0, 2, 1, 3]) /* ty=Tensor[(1, 12, 7, 64), float16] */;
+  %818 = broadcast_to(%817, shape=[1, 12, 7, 64], dtype="float16") /* ty=Tensor[(1, 12, 7, 64), float16] */;
+  %819 = %814.1 /* ty=Tensor[(1, 7, 768), float16] */;
+  %820 = reshape(%819, newshape=[1, 7, 12, 64]) /* ty=Tensor[(1, 7, 12, 64), float16] */;
+  %821 = transpose(%820, axes=[0, 2, 3, 1]) /* ty=Tensor[(1, 12, 64, 7), float16] */;
+  %822 = broadcast_to(%821, shape=[1, 12, 64, 7], dtype="float16") /* ty=Tensor[(1, 12, 64, 7), float16] */;
+  %823 = reshape(%818, newshape=[-1, 7, 64]) /* ty=Tensor[(12, 7, 64), float16] */;
+  %824 = reshape(%822, newshape=[-1, 64, 7]) /* ty=Tensor[(12, 64, 7), float16] */;
+  %825 = nn.batch_matmul(%823, %824, out_dtype="float16") /* ty=Tensor[(12, 7, 7), float16] */;
+  %826 = reshape(%825, newshape=[1, 12, 7, 7]) /* ty=Tensor[(1, 12, 7, 7), float16] */;
+  %827 = squeeze(%826, axis=[]) /* ty=Tensor[(1, 12, 7, 7), float16] */;
+  %828 = divide(%827, 8f16 /* ty=float16 */) /* ty=Tensor[(1, 12, 7, 7), float16] */;
+  %829 = multiply(%828, meta[relay.Constant][158] /* ty=Tensor[(1, 1, 7, 7), float16] */) /* ty=Tensor[(1, 12, 7, 7), float16] */;
+  %830 = add(%829, meta[relay.Constant][159] /* ty=Tensor[(1, 1, 7, 7), float16] */) /* ty=Tensor[(1, 12, 7, 7), float16] */;
+  %831 = cast(%830, dtype="float32") /* ty=Tensor[(1, 12, 7, 7), float32] */;
+  %832 = nn.softmax(%831) /* ty=Tensor[(1, 12, 7, 7), float32] */;
+  %833 = nn.dropout(%832, rate=0.1f) /* ty=(Tensor[(1, 12, 7, 7), float32], Tensor[(1, 12, 7, 7), float32]) */;
+  %834 = %833.0 /* ty=Tensor[(1, 12, 7, 7), float32] */;
+  %835 = broadcast_to(%834, shape=[1, 12, 7, 7]) /* ty=Tensor[(1, 12, 7, 7), float32] */;
+  %836 = reshape(%835, newshape=[-1, 7, 7]) /* ty=Tensor[(12, 7, 7), float32] */;
+  %837 = %814.2 /* ty=Tensor[(1, 7, 768), float16] */;
+  %838 = reshape(%837, newshape=[1, 7, 12, 64]) /* ty=Tensor[(1, 7, 12, 64), float16] */;
+  %839 = transpose(%838, axes=[0, 2, 1, 3]) /* ty=Tensor[(1, 12, 7, 64), float16] */;
+  %840 = broadcast_to(%839, shape=[1, 12, 7, 64], dtype="float16") /* ty=Tensor[(1, 12, 7, 64), float16] */;
+  %841 = cast(%836, dtype="float16") /* ty=Tensor[(12, 7, 7), float16] */;
+  %842 = reshape(%840, newshape=[-1, 7, 64]) /* ty=Tensor[(12, 7, 64), float16] */;
+  %843 = nn.batch_matmul(%841, %842, out_dtype="float16") /* ty=Tensor[(12, 7, 64), float16] */;
+  %844 = reshape(%843, newshape=[1, 12, 7, 64]) /* ty=Tensor[(1, 12, 7, 64), float16] */;
+  %845 = squeeze(%844, axis=[]) /* ty=Tensor[(1, 12, 7, 64), float16] */;
+  %846 = transpose(%845, axes=[0, 2, 1, 3]) /* ty=Tensor[(1, 7, 12, 64), float16] */;
+  %847 = reshape(%846, newshape=[1, 7, 768]) /* ty=Tensor[(1, 7, 768), float16] */;
+  %848 = reshape(%847, newshape=[-1, 768]) /* ty=Tensor[(7, 768), float16] */;
+  %849 = nn.dense(%848, meta[relay.Constant][160] /* ty=Tensor[(768, 768), float16] */, units=768, out_dtype="float16") /* ty=Tensor[(7, 768), float16] */;
+  %850 = add(%849, meta[relay.Constant][161] /* ty=Tensor[(768), float16] */) /* ty=Tensor[(7, 768), float16] */;
+  %851 = reshape(%850, newshape=[1, 7, 768]) /* ty=Tensor[(1, 7, 768), float16] */;
+  %852 = nn.dropout(%851, rate=0.1f) /* ty=(Tensor[(1, 7, 768), float16], Tensor[(1, 7, 768), float16]) */;
+  %853 = %852.0 /* ty=Tensor[(1, 7, 768), float16] */;
+  %854 = cast(%853, dtype="float32") /* ty=Tensor[(1, 7, 768), float32] */;
+  %855 = add(%808, %854) /* ty=Tensor[(1, 7, 768), float32] */;
+  %856 = nn.layer_norm(%855, meta[relay.Constant][162] /* ty=Tensor[(768), float32] */, meta[relay.Constant][163] /* ty=Tensor[(768), float32] */) /* ty=Tensor[(1, 7, 768), float32] */;
+  %857 = reshape(%856, newshape=[-1, 768]) /* ty=Tensor[(7, 768), float32] */;
+  %858 = cast(%857, dtype="float16") /* ty=Tensor[(7, 768), float16] */;
+  %859 = nn.dense(%858, meta[relay.Constant][164] /* ty=Tensor[(3072, 768), float16] */, units=3072, out_dtype="float16") /* ty=Tensor[(7, 3072), float16] */;
+  %860 = add(%859, meta[relay.Constant][165] /* ty=Tensor[(3072), float16] */) /* ty=Tensor[(7, 3072), float16] */;
+  %861 = reshape(%860, newshape=[1, 7, 3072]) /* ty=Tensor[(1, 7, 3072), float16] */;
+  %862 = multiply(%861, 0.5f16 /* ty=float16 */) /* ty=Tensor[(1, 7, 3072), float16] */;
+  %863 = cast(%861, dtype="float32") /* ty=Tensor[(1, 7, 3072), float32] */;
+  %864 = power(%863, 3f /* ty=float32 */) /* ty=Tensor[(1, 7, 3072), float32] */;
+  %865 = multiply(%864, 0.044715f /* ty=float32 */) /* ty=Tensor[(1, 7, 3072), float32] */;
+  %866 = add(%863, %865) /* ty=Tensor[(1, 7, 3072), float32] */;
+  %867 = multiply(%866, 0.797885f /* ty=float32 */) /* ty=Tensor[(1, 7, 3072), float32] */;
+  %868 = tanh(%867) /* ty=Tensor[(1, 7, 3072), float32] */;
+  %869 = cast(%862, dtype="float32") /* ty=Tensor[(1, 7, 3072), float32] */;
+  %870 = add(%868, 1f /* ty=float32 */) /* ty=Tensor[(1, 7, 3072), float32] */;
+  %871 = multiply(%869, %870) /* ty=Tensor[(1, 7, 3072), float32] */;
+  %872 = reshape(%871, newshape=[-1, 3072]) /* ty=Tensor[(7, 3072), float32] */;
+  %873 = cast(%872, dtype="float16") /* ty=Tensor[(7, 3072), float16] */;
+  %874 = nn.dense(%873, meta[relay.Constant][166] /* ty=Tensor[(768, 3072), float16] */, units=768, out_dtype="float16") /* ty=Tensor[(7, 768), float16] */;
+  %875 = add(%874, meta[relay.Constant][167] /* ty=Tensor[(768), float16] */) /* ty=Tensor[(7, 768), float16] */;
+  %876 = reshape(%875, newshape=[1, 7, 768]) /* ty=Tensor[(1, 7, 768), float16] */;
+  %877 = nn.dropout(%876, rate=0.1f) /* ty=(Tensor[(1, 7, 768), float16], Tensor[(1, 7, 768), float16]) */;
+  %878 = %877.0 /* ty=Tensor[(1, 7, 768), float16] */;
+  %879 = cast(%878, dtype="float32") /* ty=Tensor[(1, 7, 768), float32] */;
+  %880 = add(%856, %879) /* ty=Tensor[(1, 7, 768), float32] */;
+  %881 = nn.layer_norm(%880, meta[relay.Constant][168] /* ty=Tensor[(768), float32] */, meta[relay.Constant][169] /* ty=Tensor[(768), float32] */) /* ty=Tensor[(1, 7, 768), float32] */;
+  reshape(%881, newshape=[1, 7, 768]) /* ty=Tensor[(1, 7, 768), float32] */
+}
+
+
